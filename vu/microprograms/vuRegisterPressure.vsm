@@ -1,0 +1,40 @@
+.vu
+.align 4
+
+.global vuRegisterPressure_Start
+.global vuRegisterPressure_End
+
+
+vuRegisterPressure_Start:
+NOP						IADDIU VI10, VI00, 4096	
+NOP						IADD VI01, VI00, VI00
+loopStart:
+ADD vf01, vf01, vf01	NOP
+MUL vf02, vf02, vf02	NOP
+ADD vf03, vf03, vf03	NOP
+MUL vf04, vf04, vf04	NOP
+ADD vf05, vf01, vf01	NOP
+MUL vf06, vf02, vf01	NOP
+ADD vf07, vf03, vf02	NOP
+MUL vf08, vf04, vf03	NOP
+ADD vf09, vf05, vf04	NOP
+MUL vf10, vf06, vf05	NOP
+ADD vf11, vf07, vf06	NOP
+MUL vf12, vf08, vf07	NOP
+ADD vf13, vf09, vf08	NOP
+MUL vf14, vf10, vf09	NOP
+ADD vf15, vf11, vf10	NOP
+MUL vf16, vf12, vf11	NOP
+ADD vf17, vf13, vf12	NOP
+MUL vf18, vf14, vf13	NOP
+ADD vf19, vf15, vf14	NOP
+MUL vf20, vf16, vf15	NOP
+ADD vf21, vf17, vf16	NOP
+MUL vf22, vf18, vf17	NOP
+ADD vf23, vf19, vf18	NOP
+MUL vf24, vf20, vf19	IADDIU VI01, VI01, 1
+
+NOP							NOP
+NOP							IBNE VI01, VI10, loopStart
+NOP							IADD VI03, VI01, VI03
+vuRegisterPressure_End:

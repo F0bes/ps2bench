@@ -1,0 +1,59 @@
+.vu
+.align 4
+
+.global vuStress_Start
+.global vuStress_End
+
+vuStress_Start:										; 4096 loops is a pretty good balance
+													; Mix and match with the frequency of vu runs in mvuKiller.c
+NOP							IADDIU VI10, VI00, 4096	
+loopStart:
+ADD.x	vf01, vf00, vf00	IADD VI01, VI00, VI00
+ADD.y 	vf01, vf01, vf01	IADD VI02, VI01, VI01
+ADD.z	vf01, vf01, vf01	ISUB VI03, VI02, VI01
+ADD.w	vf01, vf01, vf01	IADD VI02, VI01, VI03
+add.xyzw vf02, vf02, vf02	ISUB VI03, VI02, VI01
+SUB.x	vf01, vf01, vf01	ERSADD P, VF01			; t/l 17/18
+SUB.y	vf01, vf01, vf01	IADD VI02, VI21, VI03
+SUB.z	vf01, vf01, vf01	ISUB VI03, VI02, VI01
+SUB.w	vf01, vf01, vf01	IADD VI02, VI01, VI03
+add.xyzw vf02, vf02, vf02	ISUB VI03, VI02, VI01
+ADD.x	vf01, vf00, vf00	IADD VI01, VI00, VI00
+ADD.y 	vf01, vf01, vf01	IADD VI02, VI01, VI01
+ADD.z	vf01, vf01, vf01	ISUB VI03, VI02, VI01
+ADD.w	vf01, vf01, vf01	IADD VI02, VI01, VI03
+add.xyzw vf02, vf02, vf02	ISUB VI03, VI02, VI01
+SUB.x	vf01, vf01, vf01	ISUB VI03, VI02, VI01
+SUB.y	vf01, vf01, vf01	IADD VI02, VI21, VI03
+SUB.z	vf01, vf01, vf01	ISUB VI03, VI02, VI01
+SUB.w	vf01, vf01, vf01	IADD VI02, VI01, VI03
+add.xyzw vf02, vf02, vf02	ISUB VI03, VI02, VI01
+ADD.x	vf01, vf00, vf00	IADD VI01, VI00, VI00
+ADD.y 	vf01, vf01, vf01	IADD VI02, VI01, VI01
+ADD.z	vf01, vf01, vf01	ISUB VI03, VI02, VI01
+ADD.w	vf01, vf01, vf01	IADD VI02, VI01, VI03
+add.xyzw vf02, vf02, vf02	ISUB VI03, VI02, VI01
+SUB.x	vf01, vf01, vf01	ISUB VI03, VI02, VI01
+SUB.y	vf01, vf01, vf01	IADD VI02, VI21, VI03	; ERSADD finished
+SUB.z	vf01, vf01, vf01	ESQRT P, VF01x
+SUB.w	vf01, vf01, vf01	IADD VI02, VI01, VI03
+add.xyzw vf02, vf02, vf02	ISUB VI03, VI02, VI01
+ADD.x	vf01, vf00, vf00	IADD VI01, VI00, VI00
+ADD.y 	vf01, vf01, vf01	IADD VI02, VI01, VI01
+ADD.z	vf01, vf01, vf01	ISUB VI03, VI02, VI01
+ADD.w	vf01, vf01, vf01	IADD VI02, VI01, VI03
+add.xyzw vf02, vf02, vf02	ISUB VI03, VI02, VI01
+SUB.x	vf01, vf01, vf01	ISUB VI03, VI02, VI01
+SUB.y	vf01, vf01, vf01	IADD VI02, VI21, VI03
+SUB.z	vf01, vf01, vf01	ISUB VI03, VI02, VI01
+SUB.w	vf01, vf01, vf01	IADD VI02, VI01, VI03
+add.xyzw vf02, vf02, vf02	IADDIU VI01, VI01, 1
+
+NOP							NOP
+NOP							IBNE VI01, VI10, loopStart
+NOP							IADD VI03, VI01, VI03
+
+NOP[e]						NOP
+NOP							NOP
+
+vuStress_End:
