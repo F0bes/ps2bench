@@ -42,17 +42,17 @@ void uploadMicroProgram(const u32 offset, const u64* start, const u64* end, u32 
 void static waitVU0Finish(void)
 {
 	asm(
-		"vu0_wait:\n"
+		"vu0_wait%=:\n"
 		"cfc2 $t0, $vi29\n" // VPU-STAT
 		"andi $t0,$t0,1\n"
-		"bgtz $t0, vu0_wait\n" ::
+		"bgtz $t0, vu0_wait%=\n" ::
 			: "$t0");
 }
 
 void static waitVU1Finish(void)
 {
 	asm(
-		"vu1_active:\n"
-		"bc2t vu1_active\n"
-		"nop\n");
+		"vu1_active_%=:\n"
+		"bc2t vu1_active_%=\n"
+		"nop\n":);
 }
