@@ -70,7 +70,7 @@ enum ee_menu_location
 };
 const char* l_ee_sections[MENU_EE_COUNT] =
 	{
-		"Benching (3)",
+		"Benching (4)",
 		"Stupid stuff (1)",
 		"Back",
 };
@@ -96,6 +96,7 @@ enum ee_menu_bench_location
 	MENU_EE_BENCH_BASIC,
 	MENU_EE_BENCH_SMALLBLOCK,
 	MENU_EE_BENCH_SDXLDX,
+	MENU_EE_BENCH_DWA,
 	MENU_EE_BENCH_BACK,
 	MENU_EE_BENCH_COUNT,
 };
@@ -104,6 +105,7 @@ const char* l_ee_bench_sections[MENU_EE_BENCH_COUNT] =
 		"Basic arithmetic",
 		"Small recompiler blocks",
 		"SDL/SDR & LDL/LDR benching",
+		"Double word arithmetic",
 		"Back",
 };
 
@@ -119,6 +121,9 @@ void handle_ee_bench_section_click(u32 selection)
 			break;
 		case MENU_EE_BENCH_SDXLDX:
 			eebench_SDXLDXFallback();
+			break;
+		case MENU_EE_BENCH_DWA:
+			eebench_dwArithmetic();
 			break;
 		case MENU_EE_BENCH_BACK:
 			our_menu_location = locs_MENU_EE;

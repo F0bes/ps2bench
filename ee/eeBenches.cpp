@@ -20,6 +20,70 @@ void eebench_loopArithmetic(void)
 	}
 }
 
+// Just a fun little formula I wrote up
+// The single word assembly is commented out there
+void eebench_dwArithmetic(void)
+{
+	eePrintf("Starting the EE doubleword arithmetic test\n");
+	// Let's do some fun with math
+	// F(x)
+	// if x is odd, 3x+1 else,x/2
+	// This will always reach the number 1
+	u64 iter_num = 2; // Start at 2
+	u64 cur_num __attribute__((aligned(32)));
+	cur_num = iter_num;
+	u64 number_iterations = 0;
+
+	while (1)
+	{
+		number_iterations++;
+		asm __volatile__(
+
+			//"ld $t3, 0(%0)\n"
+			"lw $t3, 0(%0)\n"	// Load dw
+
+			"li $t1, 1\n"		// Find out if the input is odd
+			"and $t2, $t3, $t1\n"
+			// t2 is 1 if odd, 0 is even
+
+			"bgtz $t2, bigArith_odd\n"
+			"nop\n"
+			
+			// t2 is even 
+			
+			"dsrl $t3, $t3, 1\n" // Shift right by 1 bit (div by 2)
+			//"li $t0, 2\n"
+			//"divu $t3, $t3, $t0\n"
+
+			"b bigArith_end\n"
+
+			"bigArith_odd:\n"
+			// t2 is odd
+			//"li $t0, 3\n"
+			//"multu $t3, $t3, $t0\n"
+			
+			"or $t2, $t3, $zero\n"	// Copy t3
+			"dsll $t3, $t3, 1\n"	// Shift t3 to the left by 1 bit (mul by 2)
+			"daddu $t3, $t2, $t3\n" // Add t3 to t2 (itself)
+			"ori $t2, $zero, 1\n"	// Add 1
+			"daddu $t3, $t3, $t2\n"	
+			
+			//"addiu $t3, $t3, 1\n"
+
+			"bigArith_end:\n"
+			"sd $t3, 0(%0)\n"		// Store dw
+			::"r"(&cur_num)
+				: "$t0", "$t1", "$t2", "$t3");
+		if (pad_do_i_leave())
+			return;
+		if(cur_num == 1)
+		{
+			cur_num = iter_num++;
+			number_iterations = 0;
+		}
+	}
+}
+
 // Developed to bench: https://github.com/PCSX2/pcsx2/pull/4739
 void eebench_SDXLDXFallback(void)
 {

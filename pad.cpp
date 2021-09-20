@@ -117,7 +117,6 @@ pad_input_state_t pad_get_input_state(void)
 
 u32 pad_do_i_leave(void)
 {
-
 	u16 ret = padRead(0, 0, &buttons);
 
 	paddata = 0xffff ^ buttons.btns;
@@ -128,7 +127,7 @@ u32 pad_do_i_leave(void)
 	{
 		if (new_pad & PAD_CROSS)
 		{
-			eePrintf("1\n");
+			return 1;
 		}
 	}
 	else

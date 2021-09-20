@@ -1,6 +1,4 @@
 #include "ee.hpp"
-
-
 // Stresses the JIT by creating a bunch of small blocks
 
 // This heavily increases compile time, maybe I'll generate this at runtime instead
