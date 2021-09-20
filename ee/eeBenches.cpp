@@ -3,7 +3,7 @@
 // Doesn't stress much, just loops, doing some math
 void eebench_loopArithmetic(void)
 {
-	eePrintf("Starting the EE arithmetic test\n");
+	printf("Starting the EE arithmetic test\n");
 	while (1)
 	{
 		asm __volatile__(
@@ -24,7 +24,7 @@ void eebench_loopArithmetic(void)
 // The single word assembly is commented out there
 void eebench_dwArithmetic(void)
 {
-	eePrintf("Starting the EE doubleword arithmetic test\n");
+	printf("Starting the EE doubleword arithmetic test\n");
 	// Let's do some fun with math
 	// F(x)
 	// if x is odd, 3x+1 else,x/2
@@ -88,15 +88,13 @@ void eebench_dwArithmetic(void)
 void eebench_SDXLDXFallback(void)
 {
 	u128 someMemory = (u128)0x123456789abcdef << 64 | (u128)0x123456789abcdef;
-	eePrintf("Starting the EE SDL,SDR,LDL,and LDR tests");
+	printf("Starting the EE SDL,SDR,LDL,and LDR tests\n");
 
 	while (1)
 	{
-		for (int i = 0; i < 1800000; i++)
-		{
-			// TODO: Dyanmic code generation
-			if (pad_do_i_leave())
+		if (pad_do_i_leave())
 				return;
+			// TODO: Dyanmic code generation
 			asm(
 				"LDL $t0, 0(%0)\n"
 				"addi $t1, $zero, 0x100\n"
@@ -595,9 +593,14 @@ void eebench_SDXLDXFallback(void)
 				"addiu $s3, $s2, 0x600\n"
 				"addu $s4, $s3, $t1\n"
 				"LDR $t0, 15(%0)\n"
+				"addi $t1, $zero, 0x100\n"
+				"addiu $t2, $t1, 0x200\n"
+				"addiu $s0, $t3, 0x200\n"
+				"addiu $s1, $s0, 0x400\n"
+				"addiu $s2, $s1, 0x500\n"
+				"addiu $s3, $s2, 0x600\n"
+				"addu $s4, $s3, $t1\n"
 				"SDR $t0, 15(%0)\n" ::"r"(&someMemory)
 				: "$t0", "$t1", "$t2", "$t3", "$s0", "$s1", "$s2", "$s3", "$s4");
-		}
-		graph_wait_vsync();
 	}
 }

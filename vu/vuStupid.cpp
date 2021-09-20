@@ -1,5 +1,5 @@
 #include "vu.hpp"
-
+#include <gsKit.h>
 /*
 	Uploads many many micro programs, filling the recompiler cache
 	Not realistic, and hard to get a good metric on recompilation speed
@@ -30,7 +30,7 @@ void vustupid_IBitRecompilation(void)
 				menu_reset_gsKit();
 				return;
 			}
-			graph_wait_vsync();
+			gsKit_vsync_wait();
 			c = 0;
 		}
 		if (f >= __FLT_MAX__)

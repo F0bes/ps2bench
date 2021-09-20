@@ -1,7 +1,6 @@
 #pragma once
 #include <tamtypes.h>
 #include "libpad.h"
-#include "eePrintf.hpp"
 
 // Pretty much all we need
 typedef enum pad_input_state

@@ -4,6 +4,7 @@
 #include <sbv_patches.h>
 #include <sifrpc.h>
 #include <graph.h> // Todo: Roll our own wait_vsync (easy, but I'm lazy)
+#include <stdio.h>
 #include "irx/sio2man.h"
 #include "irx/padman.h"
 
@@ -33,21 +34,21 @@ void init_pad(void)
 
 	if ((ret = SifExecModuleBuffer(sio2man, size_sio2man, NULL, NULL, NULL)) < 0)
 	{
-		eePrintf("Failed to load sio2man module (%d)\n", ret);
+		printf("Failed to load sio2man module (%d)\n", ret);
 		SleepThread();
 	}
 
 	if ((ret = SifExecModuleBuffer(padman, size_padman, NULL, NULL, NULL)) < 0)
 	{
-		eePrintf("Failed to load padman module (%d)\n", ret);
+		printf("Failed to load padman module (%d)\n", ret);
 		SleepThread();
 	}
 
 
 	padInit(0);
 
-	eePrintf("Waiting on a controller connection\n");
-	eePrintf("Please use slot 0 :)\n");
+	printf("Waiting on a controller connection\n");
+	printf("Please use slot 0 :)\n");
 
 	padPortOpen(0, 0, &padBuf);
 
@@ -65,7 +66,7 @@ void init_pad(void)
 		}
 	}
 
-	eePrintf("Pad connected!\n");
+	printf("Pad connected!\n");
 }
 
 struct padButtonStatus buttons;
@@ -110,7 +111,7 @@ pad_input_state_t pad_get_input_state(void)
 	}
 	else
 	{
-		eePrintf("Pad read returns 0. Deciding to SleepThread()\n");
+		printf("Pad read returns 0. Deciding to SleepThread()\n");
 		SleepThread();
 	}
 }
@@ -132,7 +133,7 @@ u32 pad_do_i_leave(void)
 	}
 	else
 	{
-		eePrintf("Pad read returns 0. Deciding to SleepThread()\n");
+		printf("Pad read returns 0. Deciding to SleepThread()\n");
 		SleepThread();
 	}
 

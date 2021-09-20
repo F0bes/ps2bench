@@ -19,7 +19,7 @@ smallLoop(y){smallLoop(z){}}}}}}}}}}}}}}}}}}}}}}}}}}
 
 void eebench_smallBlocks(void)
 {
-	eePrintf("Starting the EE smallblocks test\n");
+	printf("Starting the EE smallblocks test\n");
 
 	// Write to a volatile variable so the compiler wont optimize us out and
 	// to give the EE some work 

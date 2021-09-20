@@ -279,7 +279,7 @@ void menu_init(void)
 	gsKit_fontm_upload(gsGlobal, gsFontM);
 	gsFontM->Spacing = 0.7f;
 
-	eePrintf("Initializing our menu, using defaults. (%dx%d)\n", gsGlobal->Width, gsGlobal->Height);
+	printf("Initializing our menu, using defaults. (%dx%d)\n", gsGlobal->Width, gsGlobal->Height);
 
 	gsKit_clear(gsGlobal, GS_SETREG_RGBAQ(0x0, 0xcc, 0xcc, 0x60, 0x0));
 

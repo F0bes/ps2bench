@@ -6,7 +6,6 @@
 #include <graph.h>
 #include <draw.h>
 
-#include "eePrintf.hpp"
 #include "menu.hpp"
 #include "pad.hpp"
 

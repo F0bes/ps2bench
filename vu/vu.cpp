@@ -7,7 +7,7 @@ void uploadMicroProgram(const u32 offset, const u64* start, const u64* end, u32 
 
 	u32 progInstructions = (end - start);
 	if (progInstructions + offset > 512 && !vu1) // oopsiess
-		eePrintf("[ee] !!!!!!!!!! YOUR LAST BLOCK IS GOING TO WRAP TO 0 DUDE\n	!!!!!!!!!! VU0 CAN ONLY HANDLE SO MUCH :(\n");
+		printf("[ee] !!!!!!!!!! YOUR LAST BLOCK IS GOING TO WRAP TO 0 DUDE\n	!!!!!!!!!! VU0 CAN ONLY HANDLE SO MUCH :(\n");
 	// TODO: Check for VU1 code overflow? Eh, I can't write that much assembly and stay sane so it'll probably be useless
 
 	u32 mpgBlocks = 0;
@@ -24,7 +24,7 @@ void uploadMicroProgram(const u32 offset, const u64* start, const u64* end, u32 
 			vp[vpi++] = VIFMPG(size + offset, (mpgBlocks == 0 ? 0 : (mpgBlocks * 256)));
 
 			if (!hush)
-				eePrintf("[ee] VU%d MPG BLOCK\n	Offset is %d * 8\n	Size is %d 64 bit units. (0 = 256)\n", vu1, (mpgBlocks == 0 ? 0 : (mpgBlocks * 256)), size);
+				printf("[ee] VU%d MPG BLOCK\n	Offset is %d * 8\n	Size is %d 64 bit units. (0 = 256)\n", vu1, (mpgBlocks == 0 ? 0 : (mpgBlocks * 256)), size);
 
 			mpgBlocks++;
 		}

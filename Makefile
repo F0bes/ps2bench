@@ -1,5 +1,5 @@
 # Main stuff
-EE_OBJS = eePrintf.o main.o pad.o menu.o 
+EE_OBJS = main.o pad.o menu.o 
 # EE stuff
 EE_OBJS += ee/eeBenches.o ee/ee_SmallBlocks.o ee/eeStupid.o
 # Micro Program stuff

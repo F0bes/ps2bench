@@ -1,4 +1,5 @@
 #include "vu.hpp"
+#include <gsKit.h>
 
 /*
 	Runs a loop with a lot of arithmetic, (hopefully) doesn't stall
@@ -8,7 +9,7 @@ extern u64 vuStress_End __attribute__((section(".vudata")));
 
 void vubench_generic(void)
 {
-	eePrintf("Starting VU generic benching\n");
+	printf("Starting VU generic benching\n");
 	uploadMicroProgram(0, &vuStress_Start, &vuStress_End, 1, 0);
 
 	u32 vp[4] __attribute__((aligned(128)));
@@ -45,7 +46,7 @@ void vubench_generic(void)
 				menu_reset_gsKit();
 				return;
 			}
-			graph_wait_vsync();
+			gsKit_vsync_wait();
 			c = 0;
 		}
 	}
@@ -62,7 +63,7 @@ extern u64 vuRegisterPressure_End __attribute__((section(".vudata")));
 
 void vubench_registerPressure(void)
 {
-	eePrintf("Starting VU register pressure\n");
+	printf("Starting VU register pressure\n");
 	uploadMicroProgram(0, &vuRegisterPressure_Start, &vuRegisterPressure_End, 1, 0);
 
 	u32 vp[4] __attribute__((aligned(128)));
@@ -99,7 +100,7 @@ void vubench_registerPressure(void)
 				menu_reset_gsKit();
 				return;
 			}
-			graph_wait_vsync();
+			gsKit_vsync_wait();
 			c = 0;
 		}
 	}

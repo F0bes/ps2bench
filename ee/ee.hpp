@@ -6,7 +6,6 @@
 #include <graph.h>
 
 #include "pad.hpp"
-#include "eePrintf.hpp"
 
 // Benches
 void eebench_loopArithmetic(void);
