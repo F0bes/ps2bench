@@ -28,17 +28,14 @@ void handlerEEMiscRecKiller(u32 sel)
 
 void handlerVUBenchGeneric(u32 sel)
 {
-
 }
 
 void handlerVUBenchRegpressure(u32 sel)
 {
-
 }
 
 void handlerVUMiscIBit(u32 sel)
 {
-
 }
 
 void handlerAbout(u32 sel)
@@ -93,251 +90,9 @@ void Menu::Load()
 	return;
 }
 
-
-
-#include <gsKit.h>
-
 GSGLOBAL* gsGlobal;
 GSFONTM* gsFontM;
 
-// I've never a menu before, bare with me
-enum menu_location
-{
-	locs_MENU_MAIN,
-	locs_MENU_EE,
-	locs_MENU_EE_BENCH,
-	locs_MENU_EE_STUPID,
-	locs_MENU_VU,
-	locs_MENU_VU_BENCH,
-	locs_MENU_VU_STUPID,
-	locs_MENU_COUNT,
-} our_menu_location,
-	our_last_menu_location;
-
-const char* l_section_titles[locs_MENU_COUNT] =
-	{
-		"",
-		"EE",
-		"EE Benchmarks",
-		"EE Stupid Stuff",
-		"VU",
-		"VU Benchmarks",
-		"VU Stupid Stuff",
-};
-
-u32 our_current_selection = 0;
-
-// Why didn't I do this in C++ ???
-
-enum main_menu_location
-{
-	MENU_MAIN_EE,
-	MENU_MAIN_VU,
-	MENU_MAIN_EXIT,
-	MENU_MAIN_COUNT,
-};
-const char* l_main_sections[MENU_MAIN_COUNT] =
-	{
-		"EE",
-		"VU",
-		"Exit",
-};
-
-void handle_main_section_click(u32 selection)
-{
-	switch (selection)
-	{
-		case MENU_MAIN_EE:
-			our_menu_location = locs_MENU_EE;
-			break;
-		case MENU_MAIN_VU:
-			our_menu_location = locs_MENU_VU;
-			break;
-	}
-}
-
-enum ee_menu_location
-{
-	MENU_EE_BENCHING,
-	MENU_EE_STUPID,
-	MENU_EE_BACK,
-	MENU_EE_COUNT,
-};
-const char* l_ee_sections[MENU_EE_COUNT] =
-	{
-		"Benching (4)",
-		"Stupid stuff (1)",
-		"Back",
-};
-
-void handle_ee_section_click(u32 selection)
-{
-	switch (selection)
-	{
-		case MENU_EE_BENCHING:
-			our_menu_location = locs_MENU_EE_BENCH;
-			break;
-		case MENU_EE_STUPID:
-			our_menu_location = locs_MENU_EE_STUPID;
-			break;
-		case MENU_EE_BACK:
-			our_menu_location = locs_MENU_MAIN;
-			break;
-	}
-}
-
-enum ee_menu_bench_location
-{
-	MENU_EE_BENCH_BASIC,
-	MENU_EE_BENCH_SMALLBLOCK,
-	MENU_EE_BENCH_SDXLDX,
-	MENU_EE_BENCH_DWA,
-	MENU_EE_BENCH_BACK,
-	MENU_EE_BENCH_COUNT,
-};
-const char* l_ee_bench_sections[MENU_EE_BENCH_COUNT] =
-	{
-		"Basic arithmetic",
-		"Small recompiler blocks",
-		"SDL/SDR & LDL/LDR benching",
-		"Double word arithmetic",
-		"Back",
-};
-
-void handle_ee_bench_section_click(u32 selection)
-{
-	switch (selection)
-	{
-		case MENU_EE_BENCH_BASIC:
-			eebench_loopArithmetic();
-			break;
-		case MENU_EE_BENCH_SMALLBLOCK:
-			eebench_smallBlocks();
-			break;
-		case MENU_EE_BENCH_SDXLDX:
-			eebench_SDXLDXFallback();
-			break;
-		case MENU_EE_BENCH_DWA:
-			eebench_dwArithmetic();
-			break;
-		case MENU_EE_BENCH_BACK:
-			our_menu_location = locs_MENU_EE;
-			break;
-	}
-}
-
-enum ee_menu_stupid_location
-{
-	MENU_EE_STUPID_RECKILLER,
-	MENU_EE_STUPID_BACK,
-	MENU_EE_STUPID_COUNT,
-};
-const char* l_ee_stupid_sections[MENU_EE_STUPID_COUNT] =
-	{
-		"Recompiler killer (really dumb)",
-		"Back",
-};
-
-void handle_ee_stupid_section_click(u32 selection)
-{
-	switch (selection)
-	{
-		case MENU_EE_STUPID_RECKILLER:
-			eestupid_recKiller();
-			break;
-		case MENU_EE_STUPID_BACK:
-			our_menu_location = locs_MENU_EE;
-			break;
-	}
-}
-
-
-enum vu_menu_location
-{
-	MENU_VU_BENCHING,
-	MENU_VU_STUPID,
-	MENU_VU_BACK,
-	MENU_VU_COUNT,
-};
-const char* l_vu_sections[MENU_VU_COUNT] =
-	{
-		"Benching (2)",
-		"Stupid stuff (1)",
-		"Back",
-};
-
-// There has to be a better way to do this right??
-// This is getting old
-void handle_vu_section_click(u32 selection)
-{
-	switch (selection)
-	{
-		case MENU_VU_BENCHING:
-			our_menu_location = locs_MENU_VU_BENCH;
-			break;
-		case MENU_VU_STUPID:
-			our_menu_location = locs_MENU_VU_STUPID;
-			break;
-		case MENU_VU_BACK:
-			our_menu_location = locs_MENU_MAIN;
-			break;
-	}
-}
-
-enum vu_menu_bench_location
-{
-	MENU_VU_BENCH_GENERIC,
-	MENU_VU_BENCH_REGPRESSURE,
-	MENU_VU_BENCH_BACK,
-	MENU_VU_BENCH_COUNT,
-};
-const char* l_vu_bench_sections[MENU_VU_BENCH_COUNT] =
-	{
-		"Generic stress",
-		"Register pressure",
-		"Back",
-};
-
-void handle_vu_bench_section_click(u32 selection)
-{
-	switch (selection)
-	{
-		case MENU_VU_BENCH_GENERIC:
-			vubench_generic();
-			break;
-		case MENU_VU_BENCH_REGPRESSURE:
-			vubench_registerPressure();
-			break;
-		case MENU_VU_BENCH_BACK:
-			our_menu_location = locs_MENU_VU;
-			break;
-	}
-}
-
-enum vu_menu_stupid_location
-{
-	MENU_VU_STUPID_RECOMPILATION,
-	MENU_VU_STUPID_BACK,
-	MENU_VU_STUPID_COUNT,
-};
-const char* l_vu_stupid_sections[MENU_VU_STUPID_COUNT] =
-	{
-		"IBit Recompilation",
-		"Back",
-};
-
-void handle_vu_stupid_section_click(u32 selection)
-{
-	switch (selection)
-	{
-		case MENU_VU_STUPID_RECOMPILATION:
-			vustupid_IBitRecompilation();
-			break;
-		case MENU_VU_STUPID_BACK:
-			our_menu_location = locs_MENU_VU;
-			break;
-	}
-}
 
 // An easy way to delay, making it easier to navigate the menu without analogs going BRR
 // Not needed anymore, but can be useful in the future??
@@ -380,14 +135,12 @@ void menu_init(void)
 	gsKit_queue_exec(gsGlobal);
 	gsKit_sync_flip(gsGlobal);
 
-	our_menu_location = locs_MENU_MAIN;
 	menu_loop();
 }
 
 using namespace Menu;
 void menu_loop(void)
 {
-	//printf("in the loop\n");
 	// Will spent our time here if we aren't doing anything :)
 
 	float height = gsGlobal->Height;
