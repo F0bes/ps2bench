@@ -6,6 +6,7 @@
 typedef enum pad_input_state
 {
 	BTN_X,
+	BTN_O,
 	BTN_DOWN,
 	BTN_UP,
 	BTN_NONE,

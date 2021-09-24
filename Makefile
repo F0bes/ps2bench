@@ -9,7 +9,7 @@ EE_OBJS += vu/vuBenches.o vu/vuStupid.o vu/vu.o
 
 EE_BIN = ps2bench.elf
 EE_INCS = -I$(GSKIT)/include
-EE_LIBS = -lkernel -lgraph -L$(GSKIT)/lib -lgskit -ldmakit -lpad -lpatches
+EE_LIBS = -lkernel -lgraph -L$(GSKIT)/lib -lgskit -ldmakit -lpad -lpatches -lstdc++
 EE_DVP = dvp-as
 EE_VCL = vcl
 

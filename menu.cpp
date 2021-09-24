@@ -1,5 +1,100 @@
 #include "menu.hpp"
 
+// Use this for categories that don't rely on 
+// custom click functionality
+// Settings the clickHandler object to 0x0 will crash!
+void handlerNULL(u32 sel)
+{};
+
+void handlerEEBenchArith(u32 ignored)
+{
+}
+
+void handlerEEBenchArith2(u32 ignored)
+{
+}
+
+void handlerEEBenchSmallBlock(u32 ignored)
+{
+}
+
+void handlerEEBenchSDXLDX(u32 ignored)
+{
+}
+
+void handlerEEMiscRecKiller(u32 sel)
+{
+}
+
+void handlerVUBenchGeneric(u32 sel)
+{
+
+}
+
+void handlerVUBenchRegpressure(u32 sel)
+{
+
+}
+
+void handlerVUMiscIBit(u32 sel)
+{
+
+}
+
+void handlerAbout(u32 sel)
+{
+}
+
+void Menu::Load()
+{
+	printf("[ee] Starting menu load\n");
+	currentLevel = &topLevel;
+	topLevel.parent = &topLevel;
+	topLevel.clickHandler = &handlerNULL;
+	topLevel.title = "Fobesmark\n";
+
+	MenuObject* catEE = new MenuObject(&topLevel, ObjectType::CATEGORY, "EE", &handlerNULL);
+	{
+
+		MenuObject* catEEBench = new MenuObject(catEE, ObjectType::CATEGORY, "EE Benchmarks", &handlerNULL);
+		{
+			MenuObject* arithBasic = new MenuObject(catEEBench, ObjectType::FUNCTION, "Basic Arithmetic", &handlerEEBenchArith);
+
+			MenuObject* arithDouble = new MenuObject(catEEBench, ObjectType::FUNCTION, "Doubleword Arithmetic", &handlerEEBenchArith2);
+
+			MenuObject* smallBlocks = new MenuObject(catEEBench, ObjectType::FUNCTION, "Small recompiler blocks", &handlerEEBenchSmallBlock);
+
+			MenuObject* sdxldx = new MenuObject(catEEBench, ObjectType::FUNCTION, "LD(x) and SD(x)", &handlerEEBenchSDXLDX);
+		}
+
+		MenuObject* catEEMisc = new MenuObject(catEE, ObjectType::CATEGORY, "EE Misc", &handlerNULL);
+		{
+			MenuObject* recKiller = new MenuObject(catEEMisc, ObjectType::FUNCTION, "EERec Killer", &handlerEEMiscRecKiller);
+		}
+	}
+
+	MenuObject* catVU = new MenuObject(&topLevel, ObjectType::CATEGORY, "VU", &handlerNULL);
+		{
+			MenuObject* catVUBench = new MenuObject(catVU,ObjectType::CATEGORY,"VU Benchmarks",&handlerNULL);
+			{
+				MenuObject* generic = new MenuObject(catVUBench,ObjectType::FUNCTION,"Generic",&handlerVUBenchGeneric);
+
+				MenuObject* regPressure = new MenuObject(catVUBench,ObjectType::FUNCTION,"Register pressure",&handlerVUBenchRegpressure);
+			}
+
+			MenuObject* catVUMisc = new MenuObject(catVU,ObjectType::CATEGORY,"VU Misc",&handlerNULL);
+			{
+				MenuObject* iBitRecomp = new MenuObject(catVUMisc,ObjectType::FUNCTION,"IBit Recompilation",&handlerVUMiscIBit);
+			}
+		}
+
+	MenuObject* funcAbout = new MenuObject(&topLevel, ObjectType::CATEGORY, "About", &handlerAbout);
+	printf("[ee] Finished menu load!\n");
+	return;
+}
+
+
+
 #include <gsKit.h>
 
 GSGLOBAL* gsGlobal;
@@ -260,7 +355,6 @@ void menu_reset_gsKit(void)
 	gsKit_init_screen(gsGlobal);
 }
 
-
 void menu_init(void)
 {
 	GIFCTRL = 1;
@@ -290,8 +384,10 @@ void menu_init(void)
 	menu_loop();
 }
 
+using namespace Menu;
 void menu_loop(void)
 {
+	//printf("in the loop\n");
 	// Will spent our time here if we aren't doing anything :)
 
 	float height = gsGlobal->Height;
@@ -303,91 +399,54 @@ void menu_loop(void)
 	const u64 unsel_colour = GS_SETREG_RGBAQ(0x40, 0x40, 0xff, 0x40, 0x0);
 
 	gsFontM->Align = GSKIT_FALIGN_CENTER;
-	u32 optionCount = 0;
-	const char** optionList = 0x0;
-	void (*enterHandler)(u32) = 0x0;
-	u32 updateMenu = 1;
+
+	u32 selection = 0;
 	while (1)
 	{
 		gsKit_clear(gsGlobal, bg_colour);
 
-		gsKit_fontm_print_scaled(gsGlobal, gsFontM, width / 2, 2, 1, 1.0f, unsel_colour, "fobesmark");
-		gsKit_fontm_print_scaled(gsGlobal, gsFontM, width / 2, 50, 1, 1.0f, sel_colour, l_section_titles[our_menu_location]);
+		gsKit_fontm_print_scaled(gsGlobal, gsFontM, width / 2, 2, 1, 1.0f, sel_colour, currentLevel->title.c_str());
 		float optionY = 150;
 
-		if (updateMenu)
+		u32 iterSelection = 0;
+		for (MenuObject* currentLevelChild : currentLevel->children)
 		{
-			switch (our_menu_location)
-			{
-				case locs_MENU_MAIN:
-					optionCount = MENU_MAIN_COUNT;
-					optionList = &l_main_sections[0];
-					enterHandler = &handle_main_section_click;
-					break;
-				case locs_MENU_EE:
-					optionCount = MENU_EE_COUNT;
-					optionList = &l_ee_sections[0];
-					enterHandler = &handle_ee_section_click;
-					break;
-				case locs_MENU_EE_BENCH:
-					optionCount = MENU_EE_BENCH_COUNT;
-					optionList = &l_ee_bench_sections[0];
-					enterHandler = &handle_ee_bench_section_click;
-					break;
-				case locs_MENU_EE_STUPID:
-					optionCount = MENU_EE_STUPID_COUNT;
-					optionList = &l_ee_stupid_sections[0];
-					enterHandler = &handle_ee_stupid_section_click;
-					break;
-				case locs_MENU_VU:
-					optionCount = MENU_VU_COUNT;
-					optionList = &l_vu_sections[0];
-					enterHandler = &handle_vu_section_click;
-					break;
-				case locs_MENU_VU_BENCH:
-					optionCount = MENU_VU_BENCH_COUNT;
-					optionList = &l_vu_bench_sections[0];
-					enterHandler = &handle_vu_bench_section_click;
-					break;
-				case locs_MENU_VU_STUPID:
-					optionCount = MENU_VU_STUPID_COUNT;
-					optionList = &l_vu_stupid_sections[0];
-					enterHandler = &handle_vu_stupid_section_click;
-					break;
-			}
-			updateMenu = 0;
-		}
-
-		for (int i = 0; i < optionCount; i++)
-		{
-			if (i == our_current_selection)
-				gsKit_fontm_print_scaled(gsGlobal, gsFontM, width / 2, optionY, 1, 0.9f, sel_colour, optionList[i]);
+			if (iterSelection == selection)
+				gsKit_fontm_print_scaled(gsGlobal, gsFontM, width / 2, optionY, 1, 0.8f, sel_colour, currentLevelChild->title.c_str());
 			else
-				gsKit_fontm_print_scaled(gsGlobal, gsFontM, width / 2, optionY, 1, 0.8f, unsel_colour, optionList[i]);
-			optionY += 25.0f;
-		}
+				gsKit_fontm_print_scaled(gsGlobal, gsFontM, width / 2, optionY, 1, 0.8f, unsel_colour, currentLevelChild->title.c_str());
 
+			iterSelection++;
+			optionY += 30;
+		}
 
 		pad_input_state_t pis = pad_get_input_state();
 		switch (pis)
 		{
 			case BTN_UP:
-				if (our_current_selection == 0)
-					our_current_selection = optionCount - 1;
+				if (selection == 0)
+					selection = currentLevel->children.size() - 1;
 				else
-					our_current_selection--;
+					selection--;
 				break;
 			case BTN_DOWN:
-				if (our_current_selection == optionCount - 1)
-					our_current_selection = 0;
+				if (selection == currentLevel->children.size() - 1)
+					selection = 0;
 				else
-					our_current_selection++;
+					selection++;
 				break;
 			case BTN_X:
-				enterHandler(our_current_selection);
-				updateMenu = 1;
-				our_current_selection = 0;
+			{
+				currentLevel = currentLevel->children.at(selection);
+				selection = 0;
 				break;
+			}
+			case BTN_O:
+			{
+				currentLevel = currentLevel->parent;
+				selection = 0;
+			}
+			break;
 			default:
 				// ..
 				break;

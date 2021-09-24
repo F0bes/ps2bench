@@ -44,7 +44,6 @@ void init_pad(void)
 		SleepThread();
 	}
 
-
 	padInit(0);
 
 	printf("Waiting on a controller connection\n");
@@ -102,6 +101,9 @@ pad_input_state_t pad_get_input_state(void)
 
 		if (new_pad & PAD_CROSS)
 			return BTN_X;
+
+		if(new_pad & PAD_CIRCLE)
+			return BTN_O;
 
 		// This worked the first time, don't trust it!
 		if (buttons.rjoy_v > 20 && buttons.rjoy_v < 200 && buttons.ljoy_v > 20 && buttons.ljoy_v < 200)
