@@ -11,6 +11,8 @@
 // Based on the padx example in the ps2sdk
 // Todo - maybe support disconnects and connects?
 
+using namespace Pad;
+
 char* padBuf[256] __attribute__((aligned(64)));
 
 static void padWait(int port)
@@ -24,7 +26,7 @@ static void padWait(int port)
 		graph_wait_vsync();
 }
 
-void init_pad(void)
+void Pad::init()
 {
 	int ret;
 
@@ -43,6 +45,7 @@ void init_pad(void)
 		printf("Failed to load padman module (%d)\n", ret);
 		SleepThread();
 	}
+
 
 	padInit(0);
 
@@ -74,7 +77,7 @@ static u32 old_pad;
 static u32 new_pad;
 static u32 joy_set = 0;
 
-pad_input_state_t pad_get_input_state(void)
+ButtonState Pad::readButtonState(void)
 {
 	u16 ret = padRead(0, 0, &buttons);
 
@@ -89,27 +92,27 @@ pad_input_state_t pad_get_input_state(void)
 		if ((buttons.rjoy_v >= 200 || buttons.ljoy_v >= 200) && !joy_set || new_pad & PAD_DOWN)
 		{
 			joy_set = 1;
-			return BTN_DOWN;
+			return ButtonState::DOWN;
 		}
 
 
 		if ((buttons.rjoy_v <= 20 || buttons.ljoy_v <= 20) && !joy_set || new_pad & PAD_UP)
 		{
 			joy_set = 1;
-			return BTN_UP;
+			return ButtonState::UP;
 		}
 
 		if (new_pad & PAD_CROSS)
-			return BTN_X;
+			return ButtonState::X;
 
-		if(new_pad & PAD_CIRCLE)
-			return BTN_O;
+		if (new_pad & PAD_CIRCLE)
+			return ButtonState::O;
 
 		// This worked the first time, don't trust it!
 		if (buttons.rjoy_v > 20 && buttons.rjoy_v < 200 && buttons.ljoy_v > 20 && buttons.ljoy_v < 200)
 			joy_set = 0;
 
-		return BTN_NONE;
+		return ButtonState::NONE;
 	}
 	else
 	{
@@ -118,7 +121,8 @@ pad_input_state_t pad_get_input_state(void)
 	}
 }
 
-u32 pad_do_i_leave(void)
+
+bool Pad::readButton(ButtonState button)
 {
 	u16 ret = padRead(0, 0, &buttons);
 
@@ -128,10 +132,11 @@ u32 pad_do_i_leave(void)
 
 	if (ret != 0)
 	{
-		if (new_pad & PAD_CROSS)
-		{
-			return 1;
-		}
+		if (new_pad & PAD_CROSS && button == ButtonState::X)
+			return true;
+
+		if (new_pad & PAD_CIRCLE && button == ButtonState::O)
+			return true;
 	}
 	else
 	{

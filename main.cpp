@@ -29,9 +29,9 @@ s32 main(void)
 {
 	print_motd();
 	Menu::Load();
-	printf("[ee] main()\n");
+
 	printf("[ee] Fobesmark 0.1a\n");
-	init_pad();
+	Pad::init();
 	menu_init();
 	printf("[ee] ~main()\n");
 	SleepThread();

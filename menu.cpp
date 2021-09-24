@@ -1,10 +1,9 @@
 #include "menu.hpp"
 
-// Use this for categories that don't rely on 
+// Use this for categories that don't rely on
 // custom click functionality
 // Settings the clickHandler object to 0x0 will crash!
-void handlerNULL(u32 sel)
-{};
+void handlerNULL(u32 sel){};
 
 void handlerEEBenchArith(u32 ignored)
 {
@@ -71,19 +70,19 @@ void Menu::Load()
 	}
 
 	MenuObject* catVU = new MenuObject(&topLevel, ObjectType::CATEGORY, "VU", &handlerNULL);
+	{
+		MenuObject* catVUBench = new MenuObject(catVU, ObjectType::CATEGORY, "VU Benchmarks", &handlerNULL);
 		{
-			MenuObject* catVUBench = new MenuObject(catVU,ObjectType::CATEGORY,"VU Benchmarks",&handlerNULL);
-			{
-				MenuObject* generic = new MenuObject(catVUBench,ObjectType::FUNCTION,"Generic",&handlerVUBenchGeneric);
+			MenuObject* generic = new MenuObject(catVUBench, ObjectType::FUNCTION, "Generic", &handlerVUBenchGeneric);
 
-				MenuObject* regPressure = new MenuObject(catVUBench,ObjectType::FUNCTION,"Register pressure",&handlerVUBenchRegpressure);
-			}
-
-			MenuObject* catVUMisc = new MenuObject(catVU,ObjectType::CATEGORY,"VU Misc",&handlerNULL);
-			{
-				MenuObject* iBitRecomp = new MenuObject(catVUMisc,ObjectType::FUNCTION,"IBit Recompilation",&handlerVUMiscIBit);
-			}
+			MenuObject* regPressure = new MenuObject(catVUBench, ObjectType::FUNCTION, "Register pressure", &handlerVUBenchRegpressure);
 		}
+
+		MenuObject* catVUMisc = new MenuObject(catVU, ObjectType::CATEGORY, "VU Misc", &handlerNULL);
+		{
+			MenuObject* iBitRecomp = new MenuObject(catVUMisc, ObjectType::FUNCTION, "IBit Recompilation", &handlerVUMiscIBit);
+		}
+	}
 
 	MenuObject* funcAbout = new MenuObject(&topLevel, ObjectType::CATEGORY, "About", &handlerAbout);
 	printf("[ee] Finished menu load!\n");
@@ -173,36 +172,39 @@ void menu_loop(void)
 			optionY += 30;
 		}
 
-		pad_input_state_t pis = pad_get_input_state();
-		switch (pis)
 		{
-			case BTN_UP:
-				if (selection == 0)
-					selection = currentLevel->children.size() - 1;
-				else
-					selection--;
-				break;
-			case BTN_DOWN:
-				if (selection == currentLevel->children.size() - 1)
+			using namespace Pad;
+			ButtonState bs = readButtonState();
+			switch (bs)
+			{
+				case ButtonState::UP:
+					if (selection == 0)
+						selection = currentLevel->children.size() - 1;
+					else
+						selection--;
+					break;
+				case ButtonState::DOWN:
+					if (selection == currentLevel->children.size() - 1)
+						selection = 0;
+					else
+						selection++;
+					break;
+				case ButtonState::X:
+				{
+					currentLevel = currentLevel->children.at(selection);
 					selection = 0;
-				else
-					selection++;
+					break;
+				}
+				case ButtonState::O:
+				{
+					currentLevel = currentLevel->parent;
+					selection = 0;
+				}
 				break;
-			case BTN_X:
-			{
-				currentLevel = currentLevel->children.at(selection);
-				selection = 0;
-				break;
+				default:
+					// ..
+					break;
 			}
-			case BTN_O:
-			{
-				currentLevel = currentLevel->parent;
-				selection = 0;
-			}
-			break;
-			default:
-				// ..
-				break;
 		}
 		gsKit_queue_exec(gsGlobal);
 		gsKit_sync_flip(gsGlobal);

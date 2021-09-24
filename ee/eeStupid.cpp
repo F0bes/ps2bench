@@ -39,7 +39,7 @@ void eestupid_recKiller(void)
 
 		memoryPtr--;
 
-		if (pad_do_i_leave())
+		if (Pad::readButton(Pad::ButtonState::O))
 			return;
 	}
 }

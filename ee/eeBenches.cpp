@@ -15,7 +15,7 @@ void eebench_loopArithmetic(void)
 			::
 				: "$t0", "$t1", "$t2", "$t3");
 
-		if (pad_do_i_leave())
+		if(Pad::readButton(Pad::ButtonState::O))
 			return;
 	}
 }
@@ -74,7 +74,7 @@ void eebench_dwArithmetic(void)
 			"sd $t3, 0(%0)\n"		// Store dw
 			::"r"(&cur_num)
 				: "$t0", "$t1", "$t2", "$t3");
-		if (pad_do_i_leave())
+		if(Pad::readButton(Pad::ButtonState::O))
 			return;
 		if(cur_num == 1)
 		{
@@ -92,7 +92,7 @@ void eebench_SDXLDXFallback(void)
 
 	while (1)
 	{
-		if (pad_do_i_leave())
+		if(Pad::readButton(Pad::ButtonState::O))
 				return;
 			// TODO: Dyanmic code generation
 			asm(

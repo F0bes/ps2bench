@@ -111,7 +111,7 @@ void eebench_smallBlocks(void)
 		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
 		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
 		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		if(pad_do_i_leave())
+		if(Pad::readButton(Pad::ButtonState::O))
 			return;
 	}
 }
