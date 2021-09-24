@@ -14,7 +14,7 @@ void vubench_generic(void);
 void vubench_registerPressure(void);
 
 // Stupid
-void vustupid_IBitRecompilation(void);
+void vumisc_IBitRecompilation(void);
 
 
 

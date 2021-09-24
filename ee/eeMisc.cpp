@@ -1,7 +1,7 @@
 #include "ee.hpp"
 #include <kernel.h>
 #include <stdlib.h>
-// Stupid stuff that shouldn't really be used to test perf
+// Random stuff that shouldn't really be used to test perf
 
 // SMC abuser, causes constant recompilation
 // Usually an interpreter will be faster
@@ -13,7 +13,7 @@ u32 killer_instructions[3] =
 		0x00000000, // nop
 };
 
-void eestupid_recKiller(void)
+void eemisc_recKiller(void)
 {
 	u32* memoryPtr = (u32*)malloc(sizeof(killer_instructions) * 2);
 

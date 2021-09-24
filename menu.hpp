@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <vector>
+#include <functional>
 #include <gsKit.h> // GS_SETREG_RGBAQ
 #include "ee/ee.hpp"
 #include "vu/vu.hpp"
@@ -49,7 +50,7 @@ namespace Menu
 		bool isTitlePage;
 		MenuObject* parent;
 
-		void (*clickHandler)(u32); // std::function tlb miss, i hate c++
+		std::function<void(u32)> clickHandler;
 
 		MenuObject()
 		{
@@ -61,12 +62,12 @@ namespace Menu
 			parent->children.push_back(this);
 		}
 
-		MenuObject(MenuObject* parent, ObjectType objType, const std::string title, void (*clickHandler)(u32))
+		MenuObject(MenuObject* parent, ObjectType objType, const std::string title, std::function<void(u32)> clickHandler)
 			: parent(parent)
 			, title(title)
 			, type(objType)
+			, clickHandler(clickHandler)
 		{
-			clickHandler = clickHandler;
 			parent->children.push_back(this);
 		};
 	};

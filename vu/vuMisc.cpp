@@ -10,7 +10,7 @@ extern u64 mvuIBitEnd __attribute__((section(".vudata")));
 
 // This flavour only changes the value of an I bit value
 // This recompilation can be stopped by using the I-bit hack on pcsx2
-void vustupid_IBitRecompilation(void)
+void vumisc_IBitRecompilation(void)
 {
 	float f = 0.0f;
 	int c = 0;

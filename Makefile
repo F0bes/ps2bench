@@ -1,12 +1,12 @@
 # Main stuff
 EE_OBJS = main.o pad.o menu.o 
 # EE stuff
-EE_OBJS += ee/eeBenches.o ee/ee_SmallBlocks.o ee/eeStupid.o
+EE_OBJS += ee/eeBenches.o ee/ee_SmallBlocks.o ee/eeMisc.o
 # Micro Program stuff
 EE_OBJS += vu/microprograms/ibit.o vu/microprograms/vuRegisterPressure.o vu/microprograms/vuStress.o
 # VU stuff
-EE_OBJS += vu/vuBenches.o vu/vuStupid.o vu/vu.o
-
+EE_OBJS += vu/vuBenches.o vu/vuMisc.o vu/vu.o
+ 
 EE_BIN = ps2bench.elf
 EE_INCS = -I$(GSKIT)/include
 EE_LIBS = -lkernel -lgraph -L$(GSKIT)/lib -lgskit -ldmakit -lpad -lpatches -lstdc++
