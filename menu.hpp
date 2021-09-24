@@ -49,7 +49,7 @@ namespace Menu
 		bool isTitlePage;
 		MenuObject* parent;
 
-		void (*clickHandler)(u32); // std::function tlb miss, i had c++
+		void (*clickHandler)(u32); // std::function tlb miss, i hate c++
 
 		MenuObject()
 		{
