@@ -25,7 +25,7 @@ void vustupid_IBitRecompilation(void)
 
 		if (c == 50)
 		{
-			if(Pad::readButton(Pad::ButtonState::O))
+			if (Pad::readButton(Pad::ButtonState::O))
 			{
 				menu_reset_gsKit();
 				return;

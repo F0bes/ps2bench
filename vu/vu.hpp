@@ -54,5 +54,6 @@ void static waitVU1Finish(void)
 	asm(
 		"vu1_active_%=:\n"
 		"bc2t vu1_active_%=\n"
-		"nop\n":);
+		"nop\n"
+		:);
 }

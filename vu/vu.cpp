@@ -40,7 +40,7 @@ void uploadMicroProgram(const u32 offset, const u64* start, const u64* end, u32 
 
 	if (vu1)
 	{
-		VIF1MADR = (u32) & vp[0];
+		VIF1MADR = (u32)&vp[0];
 		VIF1QWC = vpi / 4;
 	}
 	else

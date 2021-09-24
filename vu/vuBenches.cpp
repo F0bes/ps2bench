@@ -41,7 +41,7 @@ void vubench_generic(void)
 		if (c == 3) // Adjust this if you'd like, too low of a value with kill the mtvu ring buffer
 			// too high and you'll have the EE waiting on vsyncs too much and the VU will be bored
 		{
-			if(Pad::readButton(Pad::ButtonState::O))
+			if (Pad::readButton(Pad::ButtonState::O))
 			{
 				menu_reset_gsKit();
 				return;
@@ -95,7 +95,7 @@ void vubench_registerPressure(void)
 		if (c == 3) // Adjust this if you'd like, too low of a value with kill the mtvu ring buffer
 			// too high and you'll have the EE waiting on vsyncs too much and the VU will be bored
 		{
-			if(Pad::readButton(Pad::ButtonState::O))
+			if (Pad::readButton(Pad::ButtonState::O))
 			{
 				menu_reset_gsKit();
 				return;
