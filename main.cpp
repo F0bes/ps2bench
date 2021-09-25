@@ -16,7 +16,7 @@ void print_motd(void)
 		   "   /       \		\n"
 		   "  l  u   u  l		\n"
 		   "--l----*----l--	\n"
-		   "   \\   w   /     - You're running version 0.1r2\n"
+		   "   \\   w   /     - You're running version 0.1r3\n"
 		   "     ======		\n"
 		   "   /       \ __	\n"
 		   "   l        l\\ \\	\n"
@@ -32,8 +32,6 @@ s32 main(void)
 	Pad::init();
 	Menu::Load();
 	Menu::InitGS();
-
-	printf("[ee] Fobesmark 0.1a\n");
 	
 	Menu::Loop();
 
