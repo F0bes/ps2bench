@@ -27,7 +27,7 @@ void vumisc_IBitRecompilation(void)
 		{
 			if (Pad::readButton(Pad::ButtonState::O))
 			{
-				menu_reset_gsKit();
+		//		menu_reset_gsKit();
 				return;
 			}
 			gsKit_vsync_wait();

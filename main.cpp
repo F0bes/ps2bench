@@ -28,11 +28,15 @@ void print_motd(void)
 s32 main(void)
 {
 	print_motd();
+
+	Pad::init();
 	Menu::Load();
+	Menu::InitGS();
 
 	printf("[ee] Fobesmark 0.1a\n");
-	Pad::init();
-	menu_init();
+	
+	Menu::Loop();
+
 	printf("[ee] ~main()\n");
 	SleepThread();
 }

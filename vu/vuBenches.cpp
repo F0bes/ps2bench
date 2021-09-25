@@ -43,7 +43,7 @@ void vubench_generic(void)
 		{
 			if (Pad::readButton(Pad::ButtonState::O))
 			{
-				menu_reset_gsKit();
+				//menu_reset_gsKit();
 				return;
 			}
 			gsKit_vsync_wait();
@@ -97,7 +97,7 @@ void vubench_registerPressure(void)
 		{
 			if (Pad::readButton(Pad::ButtonState::O))
 			{
-				menu_reset_gsKit();
+			//	menu_reset_gsKit();
 				return;
 			}
 			gsKit_vsync_wait();

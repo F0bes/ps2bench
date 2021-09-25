@@ -3,6 +3,7 @@
 #include <vector>
 #include <functional>
 #include <gsKit.h> // GS_SETREG_RGBAQ
+
 #include "ee/ee.hpp"
 #include "vu/vu.hpp"
 #include "pad.hpp"
@@ -72,8 +73,10 @@ namespace Menu
 		};
 	};
 
-	static MenuObject topLevel;
-	static MenuObject* currentLevel;
+	extern MenuObject topLevel;
+	extern MenuObject* currentLevel;
 
 	void Load();
+	void InitGS();
+	void Loop();
 } // namespace Menu
