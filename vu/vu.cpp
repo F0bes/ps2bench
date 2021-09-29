@@ -12,7 +12,7 @@ void uploadMicroProgram(const u32 offset, const u64* start, const u64* end, u32 
 
 	u32 mpgBlocks = 0;
 	vp[vpi++] = VIFFLUSHE;
-	for (int instruction = 0; instruction < progInstructions; instruction++)
+	for (u32 instruction = 0; instruction < progInstructions; instruction++)
 	{
 		if (!(instruction % 256))
 		{
@@ -21,7 +21,7 @@ void uploadMicroProgram(const u32 offset, const u64* start, const u64* end, u32 
 				size = 0; // Then send the maximum amount in this mpg (0, but is interpreted as 256)
 
 			// If we are in our first mpg block then set the offset to be zero
-			vp[vpi++] = VIFMPG(size + offset, (mpgBlocks == 0 ? 0 : (mpgBlocks * 256)));
+			vp[vpi++] = VIFMPG((size + offset), (mpgBlocks == 0 ? 0 : (mpgBlocks * 256)));
 
 			if (!hush)
 				printf("[ee] VU%d MPG BLOCK\n	Offset is %d * 8\n	Size is %d 64 bit units. (0 = 256)\n", vu1, (mpgBlocks == 0 ? 0 : (mpgBlocks * 256)), size);
@@ -63,4 +63,23 @@ void uploadMicroProgram(const u32 offset, const u64* start, const u64* end, u32 
 	}
 
 	return;
+}
+
+void waitVU0Finish(void)
+{
+	asm(
+		"vu0_wait%=:\n"
+		"cfc2 $t0, $vi29\n" // VPU-STAT
+		"andi $t0,$t0,1\n"
+		"bgtz $t0, vu0_wait%=\n" ::
+			: "$t0");
+}
+
+void waitVU1Finish(void)
+{
+	asm(
+		"vu1_active_%=:\n"
+		"bc2t vu1_active_%=\n"
+		"nop\n"
+		:);
 }

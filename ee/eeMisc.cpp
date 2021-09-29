@@ -17,7 +17,7 @@ void eemisc_recKiller(void)
 {
 	u32* memoryPtr = (u32*)malloc(sizeof(killer_instructions) * 2);
 
-	printf("Running the recompiler killer at memory address 0x%0x\n");
+	printf("Running the recompiler killer at memory address 0x%0x\n",(u32)memoryPtr);
 
 	while (1)
 	{

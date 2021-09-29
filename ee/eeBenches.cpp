@@ -113,7 +113,6 @@ u128* ptrSafeAddress; // A safe place in memory to do our loads and stores
 bool codeGenerated = false;
 void eebench_SDXLDXFallback(void)
 {
-	
 	printf("Starting the EE SDL,SDR,LDL,and LDR tests\n");
 	if(!codeGenerated)
 	{
@@ -148,6 +147,7 @@ sdx_ldx_loop:
 		// in our generated code.
 		register u32 safeAddress asm("$t9");
 		safeAddress = (u32)ptrSafeAddress;
+		safeAddress = safeAddress + 0; // Fixes unused-but-set-variable warning
 
 		asm("jalr %0\n jalr %0\n"
 			"jalr %0\n jalr %0\n"

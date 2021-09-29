@@ -40,6 +40,8 @@ namespace Menu
 	class MenuObject
 	{
 	public:
+		bool isTitlePage;
+		MenuObject* parent;
 		// Category only feature
 		std::vector<MenuObject*> children;
 
@@ -47,9 +49,6 @@ namespace Menu
 		std::string title;
 
 		ObjectType type;
-
-		bool isTitlePage;
-		MenuObject* parent;
 
 		std::function<void(u32)> clickHandler;
 

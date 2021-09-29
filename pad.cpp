@@ -34,13 +34,13 @@ void Pad::init()
 
 	sbv_patch_enable_lmb();
 
-	if ((ret = SifExecModuleBuffer(sio2man, size_sio2man, NULL, NULL, NULL)) < 0)
+	if ((ret = SifExecModuleBuffer(sio2man, size_sio2man, 0, NULL, NULL)) < 0)
 	{
 		printf("Failed to load sio2man module (%d)\n", ret);
 		SleepThread();
 	}
 
-	if ((ret = SifExecModuleBuffer(padman, size_padman, NULL, NULL, NULL)) < 0)
+	if ((ret = SifExecModuleBuffer(padman, size_padman, 0, NULL, NULL)) < 0)
 	{
 		printf("Failed to load padman module (%d)\n", ret);
 		SleepThread();
@@ -89,14 +89,14 @@ ButtonState Pad::readButtonState(void)
 		old_pad = paddata;
 
 
-		if ((buttons.rjoy_v >= 200 || buttons.ljoy_v >= 200) && !joy_set || new_pad & PAD_DOWN)
+		if ((buttons.rjoy_v >= 200 || buttons.ljoy_v >= 200) && (!joy_set || new_pad & PAD_DOWN))
 		{
 			joy_set = 1;
 			return ButtonState::DOWN;
 		}
 
 
-		if ((buttons.rjoy_v <= 20 || buttons.ljoy_v <= 20) && !joy_set || new_pad & PAD_UP)
+		if ((buttons.rjoy_v <= 20 || buttons.ljoy_v <= 20) && (!joy_set || new_pad & PAD_UP))
 		{
 			joy_set = 1;
 			return ButtonState::UP;
@@ -111,14 +111,13 @@ ButtonState Pad::readButtonState(void)
 		// This worked the first time, don't trust it!
 		if (buttons.rjoy_v > 20 && buttons.rjoy_v < 200 && buttons.ljoy_v > 20 && buttons.ljoy_v < 200)
 			joy_set = 0;
-
-		return ButtonState::NONE;
 	}
 	else
 	{
 		printf("Pad read returns 0. Deciding to SleepThread()\n");
 		SleepThread();
 	}
+	return ButtonState::NONE;
 }
 
 

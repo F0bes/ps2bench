@@ -17,7 +17,6 @@ void vubench_registerPressure(void);
 void vumisc_IBitRecompilation(void);
 
 
-
 /* Definitions used for VIF packet generation */
 #define VIFNOP 0x00000000
 
@@ -39,21 +38,6 @@ void vumisc_IBitRecompilation(void);
 // Micro program might need to be aligned, idk
 void uploadMicroProgram(const u32 offset, const u64* start, const u64* end, u32 vu1, u32 hush);
 
-void static waitVU0Finish(void)
-{
-	asm(
-		"vu0_wait%=:\n"
-		"cfc2 $t0, $vi29\n" // VPU-STAT
-		"andi $t0,$t0,1\n"
-		"bgtz $t0, vu0_wait%=\n" ::
-			: "$t0");
-}
+void waitVU0Finish(void);
 
-void static waitVU1Finish(void)
-{
-	asm(
-		"vu1_active_%=:\n"
-		"bc2t vu1_active_%=\n"
-		"nop\n"
-		:);
-}
+void waitVU1Finish(void);

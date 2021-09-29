@@ -65,18 +65,18 @@ void Menu::Load()
 
 		MenuObject* catEEBench = new MenuObject(catEE, ObjectType::CATEGORY, "EE Benchmarks", handlerNULL);
 		{
-			MenuObject* arithBasic = new MenuObject(catEEBench, ObjectType::FUNCTION, "Basic Arithmetic", handlerEEBenchArith);
+			new MenuObject(catEEBench, ObjectType::FUNCTION, "Basic Arithmetic", handlerEEBenchArith);
 
-			MenuObject* arithDouble = new MenuObject(catEEBench, ObjectType::FUNCTION, "Doubleword Arithmetic", handlerEEBenchArith2);
+			new MenuObject(catEEBench, ObjectType::FUNCTION, "Doubleword Arithmetic", handlerEEBenchArith2);
 
-			MenuObject* smallBlocks = new MenuObject(catEEBench, ObjectType::FUNCTION, "Small recompiler blocks", handlerEEBenchSmallBlock);
+			new MenuObject(catEEBench, ObjectType::FUNCTION, "Small recompiler blocks", handlerEEBenchSmallBlock);
 
-			MenuObject* sdxldx = new MenuObject(catEEBench, ObjectType::FUNCTION, "LD(x) and SD(x)", handlerEEBenchSDXLDX);
+			new MenuObject(catEEBench, ObjectType::FUNCTION, "LD(x) and SD(x)", handlerEEBenchSDXLDX);
 		}
 
 		MenuObject* catEEMisc = new MenuObject(catEE, ObjectType::CATEGORY, "EE Misc", handlerNULL);
 		{
-			MenuObject* recKiller = new MenuObject(catEEMisc, ObjectType::FUNCTION, "EERec Killer", handlerEEMiscRecKiller);
+			new MenuObject(catEEMisc, ObjectType::FUNCTION, "EERec Killer", handlerEEMiscRecKiller);
 		}
 	}
 
@@ -84,18 +84,18 @@ void Menu::Load()
 	{
 		MenuObject* catVUBench = new MenuObject(catVU, ObjectType::CATEGORY, "VU Benchmarks", handlerNULL);
 		{
-			MenuObject* generic = new MenuObject(catVUBench, ObjectType::FUNCTION, "Generic", handlerVUBenchGeneric);
+			new MenuObject(catVUBench, ObjectType::FUNCTION, "Generic", handlerVUBenchGeneric);
 
-			MenuObject* regPressure = new MenuObject(catVUBench, ObjectType::FUNCTION, "Register pressure", handlerVUBenchRegpressure);
+			new MenuObject(catVUBench, ObjectType::FUNCTION, "Register pressure", handlerVUBenchRegpressure);
 		}
 
 		MenuObject* catVUMisc = new MenuObject(catVU, ObjectType::CATEGORY, "VU Misc", handlerNULL);
 		{
-			MenuObject* iBitRecomp = new MenuObject(catVUMisc, ObjectType::FUNCTION, "IBit Recompilation", handlerVUMiscIBit);
+			new MenuObject(catVUMisc, ObjectType::FUNCTION, "IBit Recompilation", handlerVUMiscIBit);
 		}
 	}
 
-	MenuObject* funcAbout = new MenuObject(&topLevel, ObjectType::CATEGORY, "About", handlerAbout);
+	new MenuObject(&topLevel, ObjectType::FUNCTION, "About", handlerAbout);
 	printf("[ee] Finished menu load!\n");
 	return;
 }
