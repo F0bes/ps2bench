@@ -89,14 +89,14 @@ ButtonState Pad::readButtonState(void)
 		old_pad = paddata;
 
 
-		if ((buttons.rjoy_v >= 200 || buttons.ljoy_v >= 200) && (!joy_set || new_pad & PAD_DOWN))
+		if (((buttons.rjoy_v >= 200 || buttons.ljoy_v >= 200) && !joy_set) || new_pad & PAD_DOWN)
 		{
 			joy_set = 1;
 			return ButtonState::DOWN;
 		}
 
 
-		if ((buttons.rjoy_v <= 20 || buttons.ljoy_v <= 20) && (!joy_set || new_pad & PAD_UP))
+		if (((buttons.rjoy_v <= 20 || buttons.ljoy_v <= 20) && !joy_set) || new_pad & PAD_UP)
 		{
 			joy_set = 1;
 			return ButtonState::UP;
