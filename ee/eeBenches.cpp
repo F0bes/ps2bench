@@ -1,5 +1,5 @@
 #include "ee.hpp"
-#include <stdlib.h> // calloc, free
+#include <stdlib.h> // malloc, free
 #include <kernel.h> // flushcache
 // Doesn't stress much, just loops, doing some math
 void eebench_loopArithmetic(void)
@@ -98,47 +98,60 @@ u32 SDXLDXJunkOpcodes[7]
 
 u32 SDXLDXOpcodes[4]
 {
-	0x684c0000,
-	0xb04c0000,
-	0x6c4c0000,
-	0xb44c0000,
+	0x6b2c0000,	// ldl $t4 0($t9)
+	0xb32c0000, // sdl $t4 0($t9)
+	0x6f2c0000, // ldr $t4 0($t9)
+	0xb72c0000, // sdr $t4 0($t9)
 };
 
+
 // Developed to bench: https://github.com/PCSX2/pcsx2/pull/4739
-// Now with fancy dynacode generation :)
+// Now with fancy runtime code generation!
+u32 our_func_array[483] __attribute__((aligned(4096)));
+u32* our_func = &our_func_array[0];
+u128* ptrSafeAddress; // A safe place in memory to do our loads and stores
+bool codeGenerated = false;
 void eebench_SDXLDXFallback(void)
 {
-	u128 someMemory = (u128)0x123456789abcdef << 64 | (u128)0x123456789abcdef;
+	
 	printf("Starting the EE SDL,SDR,LDL,and LDR tests\n");
-
-	u32* our_func = (u32*)calloc(sizeof(u32) * ((4 * 0xF * 7) + 2),32); 
-
-	u32 fi = 0; // Function iter
-	for(int i = 0; i < 0xF; i++)
+	if(!codeGenerated)
 	{
-		for(int j = 0; j < 4; j++)
+		ptrSafeAddress = (u128*)malloc(sizeof(u128));
+
+		u32 fi = 0; // Function iter
+		for(int i = 0; i < 0xF; i++)
 		{
-			our_func[fi++] = SDXLDXOpcodes[j] + i;
-			for(int k = 0; k < 7; k++)
+			for(int j = 0; j < 4; j++)
 			{
-				our_func[fi++] = SDXLDXJunkOpcodes[k];
+				our_func[fi++] = SDXLDXOpcodes[j] + i;
+				for(int k = 0; k < 7; k++)
+				{
+					our_func[fi++] = SDXLDXJunkOpcodes[k];
+				}
 			}
 		}
+		our_func[fi++] = 0x03e00008; // jr $ra
+		our_func[fi++] = 0x0;
+
+		FlushCache(0); // Flush the caches, just in case
+		codeGenerated = true;
 	}
-	our_func[fi++] = 0x03e00008; // jr $ra
-	our_func[fi++] = 0x0;
 
-	printf("Our dynamically generated function is at 0x%0x. We have %d instructions there\n",&our_func[0],fi);
-	FlushCache(0);
-
-	while (1)
-	{
+sdx_ldx_loop:
 		if (Pad::readButton(Pad::ButtonState::O))
-		{
-			free(our_func);
 			return;
-		}
-		
-		asm("jalr %0" ::"r"(&our_func[0]));
-	}
+
+		// This is kind of ugly, but the code here is very finicky and works
+		// so I don't want to touch it :)
+		// The problem is, the assembler & compiler don't know that we rely on $t9
+		// in our generated code.
+		register u32 safeAddress asm("$t9");
+		safeAddress = (u32)ptrSafeAddress;
+
+		asm("jalr %0\n jalr %0\n"
+			"jalr %0\n jalr %0\n"
+			 ::"r"(&our_func[0]):"$t4","$t1","$t2","$t3","$s0","$s1","$s2","$s3","$s4","$t9");
+goto sdx_ldx_loop;
+
 }
