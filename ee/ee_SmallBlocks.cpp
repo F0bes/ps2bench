@@ -1,116 +1,28 @@
 #include "ee.hpp"
 // Stresses the JIT by creating a bunch of small blocks
 
-// This heavily increases compile time, maybe I'll generate this at runtime instead
+#define jit_block_count_est 90000 // Estimated amount of JIT blocks this'll produce
+u32 Instructions[]
+{
+	0x218cffff, // addi $t0, $t0, -1
+	0x10000001, // b 0x8
+	0x218c0001 // addi $t0, $t0, 1
+};
 
-// Currently there are 2158 for loops and I get around 120 max on 
-// my i7-9750h, linux 64 bit PCSX2 release mode with LTO
-
-#define smallLoop(x) \
-for(int x = 0; x < 1; x++) \
-	volatileValue = !volatileValue;
-
-#define smallLoops \
-smallLoop(a){smallLoop(b){smallLoop(c){smallLoop(d){smallLoop(e){smallLoop(f){	\
-smallLoop(g){smallLoop(h){smallLoop(i){smallLoop(j){smallLoop(k){smallLoop(l){	\
-smallLoop(m){smallLoop(n){smallLoop(o){smallLoop(p){smallLoop(q){smallLoop(r){	\
-smallLoop(s){smallLoop(t){smallLoop(u){smallLoop(v){smallLoop(w){smallLoop(x){	\
-smallLoop(y){smallLoop(z){}}}}}}}}}}}}}}}}}}}}}}}}}}
-
+u32 instructionBlock[jit_block_count_est * 3 + 2];
 void eebench_smallBlocks(void)
 {
 	printf("Starting the EE smallblocks test\n");
 
-	// Write to a volatile variable so the compiler wont optimize us out and
-	// to give the EE some work 
-	volatile u32 volatileValue = 0;
-
+	for(u32 i = 0; i < 3 * jit_block_count_est; i++)
+	{
+		instructionBlock[i] = Instructions[i % 3];
+	}
+	instructionBlock[(jit_block_count_est * 3) - 2] = 0x03e00008; // jr ra
+	instructionBlock[(jit_block_count_est * 3) - 1] = 0x00000000; // nop
 	while(1)
 	{
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
-		smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops smallLoops
+		asm("jalr %0"::"r"(&instructionBlock[0]));
 		if(Pad::readButton(Pad::ButtonState::O))
 			return;
 	}
