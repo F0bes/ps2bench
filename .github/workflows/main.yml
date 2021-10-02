@@ -28,3 +28,11 @@ jobs:
     - name: Compile project
       run: |
         make clean all
+        mkdir artifacts
+        cp ps2bench.elf artifacts/ps2bench.elf
+    - name: Upload ELF
+      uses: actions/upload-artifact@v2
+      with: 
+        name: ps2bench
+        path: artifacts
+
