@@ -3,9 +3,11 @@ EE_OBJS = main.o pad.o menu.o menuDraw.o
 # EE stuff
 EE_OBJS += ee/eeBenches.o ee/ee_SmallBlocks.o ee/eeMisc.o
 # Micro Program stuff
-EE_OBJS += vu/microprograms/ibit.o vu/microprograms/vuRegisterPressure.o vu/microprograms/vuStress.o
+EE_OBJS += vu/microprograms/ibit.o vu/microprograms/vuRegisterPressure.o vu/microprograms/vuStress.o vu/microprograms/vu1Birdy.o
 # VU stuff
 EE_OBJS += vu/vuBenches.o vu/vuMisc.o vu/vu.o
+# Birdy stuff
+EE_OBJS += birdy/vu1Birdy.o
  
 EE_BIN = ps2bench.elf
 EE_INCS = -I$(GSKIT)/include
