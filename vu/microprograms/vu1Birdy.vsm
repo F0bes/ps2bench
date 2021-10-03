@@ -50,11 +50,10 @@ max.x VF06, VF00, VF00		NOP
 
 xnotOver:
 
-NOP							loi 1
+NOP							loi 5
 addi.x VF06,VF06, I			NOP
 
 NOP							iaddiu VI04, VI04, 1
-
 
 ; VF06 holds our 'x'
 NOP							loi 180
@@ -88,17 +87,7 @@ NOP							div Q, VF08y, VF10y
 NOP							waitq
 ADDq.y VF05, VF00, Q		NOP
 
-
-/*
-NOP                            esin P, VF06x
-NOP                            waitp
-NOP                            MFP.y VF05y, P
-NOP                            loi 100
-muli.y VF05, VF05, I           NOP
-*/
-; VF05 holds our sinusoidal approximation
-
-NOP							loi 150
+NOP							loi 100
 muli.y VF05, VF05, I 		NOP
 
 mul.y VF05, VF30, VF05		NOP
@@ -106,12 +95,11 @@ mul.y VF05, VF30, VF05		NOP
 ; Add the sin result to our base coord y
 add.y VF01, VF01, VF05		NOP
 
-
 ; Add the counter to our base coordinate X
 ; DEBUG: Put the counter into memory
 add.x VF01, VF01, VF06		sq VF06,60(VI00)
 
-; Set Z to 0
+; Set Z to 0									THE Z COORD IS SET HERE!
 ; Load our XYZ2 offset in the gif packet
 NOP							LOI 0
 addi.z VF01, VF00, I 		ilw.w VI01,0(VI00)
@@ -140,7 +128,7 @@ ftoi4.xy VF02, VF01			sq.xyz VF02,1(VI01)
 NOP							sq.xyz VF02,2(VI01)
 
 ; Set VI01 to 1
-NOP							iaddiu VI01,VI00,17
+NOP							iaddiu VI01, VI00,1
 NOP							xgkick VI01	; bonk
 NOP[E]						NOP
 NOP							NOP
