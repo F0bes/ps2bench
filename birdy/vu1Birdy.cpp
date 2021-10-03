@@ -42,7 +42,7 @@ void Birdy::VU1::Initialize()
 	// Set up our UNPACK
 	u32 giftag_qwords = ((u32)q - (u32)&gifPacket[0]) / 16;
 	vp[vpi++] = VIFUNPACK(0b01100, (u32)giftag_qwords, 0, 1, 0);
-	for (int i = 0; i < giftag_qwords; i++)
+	for (u32 i = 0; i < giftag_qwords; i++)
 	{
 		vp[vpi++] = gifPacket[i].sw[0];
 		vp[vpi++] = gifPacket[i].sw[1];
@@ -67,6 +67,7 @@ void Birdy::VU1::Initialize()
 
 	uploadMicroProgram(0, &VU1BirdyInit, &VU1BirdyInitEnd, 1, 0);
 	waitVU1Finish();
+
 	uploadMicroProgram(0, &VU1BirdyFrame, &VU1BirdyFrameEnd, 1, 1);
 }
 
