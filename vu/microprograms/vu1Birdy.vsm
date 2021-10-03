@@ -1,0 +1,135 @@
+.vu
+.align 4
+.global VU1BirdyInit
+.global VU1BirdyInitEnd
+.global VU1BirdyFrame
+.global VU1BirdyFrameEnd
+
+; Reset the Y counter to 1
+VU1BirdyInit:
+NOP							LOI 1
+ADDI[E].Y VF30, VF00, I 	NOP
+NOP							NOP
+VU1BirdyInitEnd:
+
+
+; kick a new frame
+VU1BirdyFrame:
+; Load 1 into I
+NOP							loi 10
+
+; Add 1 to the y coord (VF06)
+; Load our base coordinates into (VF01)
+addi.y VF06,VF06, I			lq.xy VF01,0(VI00)					
+
+; Check to see if y < 180
+ftoi0.xy	VF04, VF06		NOP
+NOP							mtir VI01, VF04y
+NOP							iaddiu VI02, VI00, 180
+NOP							NOP
+NOP							IBNE VI02, VI01, ynotOver
+NOP							NOP
+
+; Reset y
+NOP							loi -1
+muli.y VF30, VF30, I		NOP
+NOP							sq.xyz VF30, 62(VI00)
+
+max.y VF06,VF00,VF00		NOP
+
+ynotOver:
+
+; Check to see if x < 500
+NOP							mtir VI01, VF04x
+NOP							iaddiu VI02, VI00, 500
+NOP							NOP
+NOP							IBNE VI02, VI01, xnotOver
+NOP							NOP
+
+max.x VF06, VF00, VF00		NOP
+
+xnotOver:
+
+NOP							loi 5
+addi.x VF06,VF06, I			NOP
+
+NOP							iaddiu VI04, VI04, 1
+
+; VF06 holds our 'x'
+NOP							loi 180
+addi.y VF08, VF00, I		loi 4
+
+; VF09 holds our '180 - x'
+sub.y VF09, VF08, VF06		NOP
+
+; Multiply by 4 '4(180-x)'
+muli.y VF08, VF09, I		NOP
+
+; Multiply by x '4x(180-x)'
+mul.y VF08, VF06, VF08		NOP
+
+;VF08 holds 4x(180-x)
+
+; Work on 40500-x(180-x)
+; VF09 still holds 180-x
+
+; VF10 is x(180-x)
+mul.y VF10, VF09, VF07		loi 40500
+
+; Set VF11 to 40500
+addi.y VF11, VF00, I		NOP
+
+; 40500 - x(180-x)
+sub.y VF10,VF11,VF10		NOP
+
+; Divide VF08 / VF10
+NOP							div Q, VF08y, VF10y
+NOP							waitq
+ADDq.y VF05, VF00, Q		NOP
+
+NOP							loi 100
+muli.y VF05, VF05, I 		NOP
+
+mul.y VF05, VF30, VF05		NOP
+
+; Add the sin result to our base coord y
+add.y VF01, VF01, VF05		NOP
+
+; Add the counter to our base coordinate X
+; DEBUG: Put the counter into memory
+add.x VF01, VF01, VF06		sq VF06,60(VI00)
+
+; Set Z to 0									THE Z COORD IS SET HERE!
+; Load our XYZ2 offset in the gif packet
+NOP							LOI 0
+addi.z VF01, VF00, I 		ilw.w VI01,0(VI00)
+
+; Convert our coords to fixed point
+; Store the fixed point result into (VF02)
+; Load 100 into I
+ftoi4.xy VF02,VF01			loi 0x42c80000
+
+;Add 100 to our X coordinate
+addi.x VF01,VF01,I			NOP
+
+; Convert our coords to fixed point
+; Store our coords into memory at the offset
+ftoi4.xy VF02,VF01			sq.xyz VF02,0(VI01)
+
+; Load 200 into I
+NOP							loi 0x43480000
+
+; Add 200 to our Y coord
+add.y VF01,VF01,VF05			NOP
+
+; Convert the coordinates to fixed point
+; Store our coords into memory
+ftoi4.xy VF02, VF01			sq.xyz VF02,1(VI01)
+NOP							sq.xyz VF02,2(VI01)
+
+; Set VI01 to 1
+NOP							iaddiu VI01, VI00,1
+NOP							xgkick VI01	; bonk
+NOP[E]						NOP
+NOP							NOP
+VU1BirdyFrameEnd:

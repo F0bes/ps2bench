@@ -8,6 +8,7 @@
 
 #include "menu.hpp"
 #include "pad.hpp"
+#include "birdy/birdy.hpp"
 
 void print_motd(void)
 {

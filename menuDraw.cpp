@@ -1,4 +1,5 @@
 #include "menu.hpp"
+#include "birdy/birdy.hpp"
 
 GSGLOBAL* gsGlobal;
 GSFONTM* gsFontM;
@@ -32,6 +33,8 @@ void Menu::InitGS()
 
 	gsKit_queue_exec(gsGlobal);
 	gsKit_sync_flip(gsGlobal);
+
+	Birdy::VU1::Initialize();
 }
 
 void Menu::Loop()
@@ -40,17 +43,19 @@ void Menu::Loop()
 	float width = gsGlobal->Width;
 
 	gsKit_mode_switch(gsGlobal, GS_ONESHOT);
-	u64 bg_colour = GS_SETREG_RGBAQ(0x0, 0xcc, 0xcc, 0x60, 0x0);
-	const u64 sel_colour = GS_SETREG_RGBAQ(0xff, 0x40, 0x40, 0x40, 0x0);
-	const u64 unsel_colour = GS_SETREG_RGBAQ(0x40, 0x40, 0xff, 0x40, 0x0);
+	u64 bg_colour = GS_SETREG_RGBAQ(0x0, 0xcc, 0xcc, 0x0, 0x0);
+	const u64 sel_colour = GS_SETREG_RGBAQ(0xff, 0x40, 0x40, 0x67, 0x0);
+	const u64 unsel_colour = GS_SETREG_RGBAQ(0x40, 0x40, 0xff, 0x67, 0x0);
 
 	gsFontM->Align = GSKIT_FALIGN_CENTER;
 
 	u32 selection = 0;
 	while (1)
 	{
+		gsGlobal->PrimAlphaEnable = false;
 		gsKit_clear(gsGlobal, bg_colour);
-
+		gsGlobal->PrimAlphaEnable = true;
+		
 		gsKit_fontm_print_scaled(gsGlobal, gsFontM, width / 2, 2, 1, 1.0f, sel_colour, currentLevel->title.c_str());
 		float optionY = 150;
 
@@ -119,7 +124,8 @@ void Menu::Loop()
 		gsFontM->Align = GSKIT_FALIGN_CENTER;
 
 		gsKit_queue_exec(gsGlobal);
+		Birdy::VU1::Frame();
 		gsKit_sync_flip(gsGlobal);
-		gsKit_queue_reset(gsGlobal->Per_Queue);
+		
 	}
 };
