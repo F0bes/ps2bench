@@ -2,7 +2,7 @@
 
 Menu::MenuObject Menu::topLevel;
 Menu::MenuObject* Menu::currentLevel;
-
+extern GSGLOBAL* gsGlobal; // HACK
 // Use this for categories that don't rely on
 // custom click functionality
 // Settings the clickHandler object to 0x0 will crash!
@@ -46,6 +46,11 @@ void handlerVUBenchRegpressure(u32 sel)
 void handlerVUMiscIBit(u32 sel)
 {
 	vumisc_IBitRecompilation();
+}
+
+void handlerBirdyVU1(u32 sel)
+{
+	Birdy::VU1::Bench(gsGlobal);
 }
 
 void handlerAbout(u32 sel)
@@ -95,6 +100,10 @@ void Menu::Load()
 		}
 	}
 
+	MenuObject* catBirdy = new MenuObject(&topLevel,ObjectType::CATEGORY, "Birdy", handlerNULL);
+	{
+		new MenuObject(catBirdy, ObjectType::FUNCTION,"VU1",handlerBirdyVU1,true);
+	}
 	new MenuObject(&topLevel, ObjectType::FUNCTION, "About", handlerAbout);
 	printf("[ee] Finished menu load!\n");
 	return;

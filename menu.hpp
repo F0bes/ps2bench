@@ -6,6 +6,7 @@
 
 #include "ee/ee.hpp"
 #include "vu/vu.hpp"
+#include "birdy/birdy.hpp"
 #include "pad.hpp"
 
 void menu_reset_gsKit(void);

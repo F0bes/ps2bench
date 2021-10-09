@@ -1,5 +1,5 @@
 #pragma once
-
+#include <gsKit.h>
 #include "../vu/vu.hpp"
 
 namespace Birdy
@@ -8,5 +8,7 @@ namespace Birdy
 	{
 		void Initialize();
 		void Frame();
+
+		void Bench(gsGlobal* gsGlobal);
 	}
 }

@@ -90,3 +90,22 @@ void Birdy::VU1::Frame()
 
 	waitVU1Finish();
 }
+
+// Todo: not rely on gsKit?
+// I mean, I expose the Frame() function already right?
+// Also, tests show that the menu doesn't affect perf _at all_
+// so this is actually kind of useless, because you'll get the same number in the menu.
+// But I'll keep it.
+void Birdy::VU1::Bench(gsGlobal* gsGlobal)
+{
+	Initialize();
+	gsKit_mode_switch(gsGlobal, GS_PERSISTENT);
+	gsKit_clear(gsGlobal, 0x0);
+	while (!Pad::readButton(Pad::ButtonState::O))
+	{
+		gsKit_queue_exec(gsGlobal);
+		Frame();
+		gsKit_sync_flip(gsGlobal);
+	}
+	gsKit_mode_switch(gsGlobal, GS_ONESHOT); // Assume that gsKit was in oneshot mode when we start ?
+}
