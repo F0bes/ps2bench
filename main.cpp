@@ -9,7 +9,7 @@
 #include "menu.hpp"
 #include "pad.hpp"
 #include "birdy/birdy.hpp"
-
+#include "iop/iop.hpp"
 void print_motd(void)
 {
 	printf(R"ART(
