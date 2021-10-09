@@ -65,7 +65,7 @@ void Birdy::VU1::Initialize()
 
 	// Once that's done, call the init micro program
 
-	uploadMicroProgram(0, &VU1BirdyInit, &VU1BirdyInitEnd, 1, 0);
+	uploadMicroProgram(0, &VU1BirdyInit, &VU1BirdyInitEnd, 1, 1);
 	waitVU1Finish();
 
 	uploadMicroProgram(0, &VU1BirdyFrame, &VU1BirdyFrameEnd, 1, 1);

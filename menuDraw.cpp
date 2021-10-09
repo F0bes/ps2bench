@@ -100,6 +100,8 @@ void Menu::Loop()
 					else
 					{
 						nextLevel->clickHandler(selection);
+						if(nextLevel->resetVU1)
+							Birdy::VU1::Initialize();
 					}
 					selection = 0;
 					break;

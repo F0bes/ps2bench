@@ -84,14 +84,14 @@ void Menu::Load()
 	{
 		MenuObject* catVUBench = new MenuObject(catVU, ObjectType::CATEGORY, "VU Benchmarks", handlerNULL);
 		{
-			new MenuObject(catVUBench, ObjectType::FUNCTION, "Generic", handlerVUBenchGeneric);
+			new MenuObject(catVUBench, ObjectType::FUNCTION, "Generic", handlerVUBenchGeneric,true);
 
-			new MenuObject(catVUBench, ObjectType::FUNCTION, "Register pressure", handlerVUBenchRegpressure);
+			new MenuObject(catVUBench, ObjectType::FUNCTION, "Register pressure", handlerVUBenchRegpressure,true);
 		}
 
 		MenuObject* catVUMisc = new MenuObject(catVU, ObjectType::CATEGORY, "VU Misc", handlerNULL);
 		{
-			new MenuObject(catVUMisc, ObjectType::FUNCTION, "IBit Recompilation", handlerVUMiscIBit);
+			new MenuObject(catVUMisc, ObjectType::FUNCTION, "IBit Recompilation", handlerVUMiscIBit,true);
 		}
 	}
 

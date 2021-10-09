@@ -44,14 +44,10 @@ namespace Menu
 		MenuObject* parent;
 		// Category only feature
 		std::vector<MenuObject*> children;
-
-
 		std::string title;
-
 		ObjectType type;
-
 		std::function<void(u32)> clickHandler;
-
+		bool resetVU1;
 		MenuObject()
 		{
 		}
@@ -62,11 +58,12 @@ namespace Menu
 			parent->children.push_back(this);
 		}
 
-		MenuObject(MenuObject* parent, ObjectType objType, const std::string title, std::function<void(u32)> clickHandler)
+		MenuObject(MenuObject* parent, ObjectType objType, const std::string title, std::function<void(u32)> clickHandler, bool resetVU1State = false)
 			: parent(parent)
 			, title(title)
 			, type(objType)
 			, clickHandler(clickHandler)
+			, resetVU1(resetVU1State)
 		{
 			parent->children.push_back(this);
 		};
