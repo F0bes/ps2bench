@@ -119,12 +119,12 @@ void eebench_SDXLDXFallback(void)
 		ptrSafeAddress = (u128*)malloc(sizeof(u128));
 
 		u32 fi = 0; // Function iter
-		for(int i = 0; i < 0xF; i++)
+		for(size_t i = 0; i < 0xF; i++)
 		{
-			for(int j = 0; j < 4; j++)
+			for(size_t j = 0; j < 4; j++)
 			{
 				our_func[fi++] = SDXLDXOpcodes[j] + i;
-				for(int k = 0; k < 7; k++)
+				for(size_t k = 0; k < 7; k++)
 				{
 					our_func[fi++] = SDXLDXJunkOpcodes[k];
 				}

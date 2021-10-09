@@ -19,7 +19,7 @@ void vubench_generic(void)
 	vp[2] = VIFNOP;
 	vp[3] = VIFFLUSHE;
 
-	int c = 0;
+	s32 c = 0;
 	while (1)
 	{
 		c++;
@@ -73,7 +73,7 @@ void vubench_registerPressure(void)
 	vp[2] = VIFNOP;
 	vp[3] = VIFFLUSHE;
 
-	int c = 0;
+	s32 c = 0;
 	while (1)
 	{
 		c++;

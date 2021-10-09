@@ -13,7 +13,7 @@ extern u64 mvuIBitEnd __attribute__((section(".vudata")));
 void vumisc_IBitRecompilation(void)
 {
 	float f = 0.0f;
-	int c = 0;
+	s32 c = 0;
 	while (1)
 	{
 		c++;

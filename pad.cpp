@@ -15,7 +15,7 @@ using namespace Pad;
 
 char* padBuf[256] __attribute__((aligned(64)));
 
-static void padWait(int port)
+static void padWait(s32 port)
 {
 	/* Wait for request to complete. */
 	while (padGetReqState(port, 0) != PAD_RSTAT_COMPLETE)
@@ -28,8 +28,7 @@ static void padWait(int port)
 
 void Pad::init()
 {
-	int ret;
-
+	s32 ret;
 	SifInitRpc(0);
 
 	sbv_patch_enable_lmb();
@@ -40,14 +39,16 @@ void Pad::init()
 		SleepThread();
 	}
 
+	printf("ret is %d\n", ret);
+
 	if ((ret = SifExecModuleBuffer(padman, size_padman, 0, NULL, NULL)) < 0)
 	{
 		printf("Failed to load padman module (%d)\n", ret);
 		SleepThread();
 	}
+	printf("ret is %d\n", ret);
 
-
-	padInit(0);
+	padInit(0); // EE interpreter w/ cache fails here, is hw a problem too?
 
 	printf("Waiting on a controller connection\n");
 	printf("Please use slot 0 :)\n");

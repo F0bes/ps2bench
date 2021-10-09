@@ -50,7 +50,7 @@ void Birdy::VU1::Initialize()
 		vp[vpi++] = gifPacket[i].sw[3];
 	}
 
-	int needPad = vpi % 4;
+	s32 needPad = vpi % 4;
 	for (; needPad > 0; needPad--)
 		vp[vpi++] = VIFNOP;
 
