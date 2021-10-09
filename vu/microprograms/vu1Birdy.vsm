@@ -41,7 +41,7 @@ ynotOver:
 
 ; Check to see if x < 500
 NOP							mtir VI01, VF04x
-NOP							iaddiu VI02, VI00, 500
+NOP							iaddiu VI02, VI00, 875
 NOP							NOP
 NOP							IBNE VI02, VI01, xnotOver
 NOP							NOP

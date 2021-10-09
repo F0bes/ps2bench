@@ -15,8 +15,8 @@ void Birdy::VU1::Initialize()
 	qword_t gifPacket[255] __attribute__((aligned(128)));
 	qword_t* q = &gifPacket[0];
 	{
-		q->sw[0] = 0x45000000; // Start coord of X (2148)
-		q->sw[1] = 0x450c8000; // Start coord of y (2048)
+		q->sw[0] = 0x44ed8000; // Start coord of X (1900)
+		q->sw[1] = 0x450c8000; // Start coord of y (2148)
 		q->sw[2] = 0x0; // Z is not preserved in the micro program!!!
 		q++;
 
