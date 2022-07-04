@@ -8,10 +8,12 @@ EE_OBJS += vu/microprograms/ibit.o vu/microprograms/vuRegisterPressure.o vu/micr
 EE_OBJS += vu/vuBenches.o vu/vuMisc.o vu/vu.o
 # Birdy stuff
 EE_OBJS += birdy/vu1Birdy.o
+# GS stuff
+EE_OBJS += gs/gs.o
  
 EE_BIN = ps2bench.elf
 EE_INCS = -I$(GSKIT)/include
-EE_LIBS = -lkernel -lgraph -L$(GSKIT)/lib -lgskit -ldmakit -lpad -lpatches -lstdc++
+EE_LIBS = -lkernel -lgraph -L$(GSKIT)/lib -lgskit -ldmakit -lpad -lpatches -lstdc++ -ldma -lpacket
 EE_DVP = dvp-as
 EE_VCL = vcl
 
@@ -30,6 +32,10 @@ run: $(EE_BIN)
 
 emu: $(EE_BIN)
 	~/PCSX2/bin/PCSX2 --elf="$(shell pwd)/$(EE_BIN)"
+
+wsl: $(EE_BIN)
+	$(PCSX2) --elf="$(shell wslpath -w $(shell pwd))/$(EE_BIN)"
+
 
 reset:
 	ps2client reset

@@ -48,6 +48,21 @@ void handlerVUMiscIBit(u32 sel)
 	vumisc_IBitRecompilation();
 }
 
+void handlerGSmppsSprite(u32 sel)
+{
+	gs_mpps_sprite();
+}
+
+void handlerGSMaxPoly(u32 sel)
+{
+	gs_maxpoly(false);
+}
+
+void handlerGSMaxPolyUnsafe(u32 sel)
+{
+	gs_maxpoly(true);
+}
+
 void handlerBirdyVU1(u32 sel)
 {
 	Birdy::VU1::Bench(gsGlobal);
@@ -98,6 +113,13 @@ void Menu::Load()
 		{
 			new MenuObject(catVUMisc, ObjectType::FUNCTION, "IBit Recompilation", handlerVUMiscIBit,true);
 		}
+	}
+
+	MenuObject* catGS = new MenuObject(&topLevel, ObjectType::CATEGORY, "GS", handlerNULL);
+	{
+		new MenuObject(catGS, ObjectType::FUNCTION, "mpps (sprite)", handlerGSmppsSprite, true);
+		new MenuObject(catGS, ObjectType::FUNCTION, "maxpoly (points)", handlerGSMaxPoly, true);
+		new MenuObject(catGS, ObjectType::FUNCTION, "maxpoly (points) (unsafe)", handlerGSMaxPolyUnsafe, true);
 	}
 
 	MenuObject* catBirdy = new MenuObject(&topLevel,ObjectType::CATEGORY, "Birdy", handlerNULL);
