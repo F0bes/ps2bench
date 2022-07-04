@@ -23,6 +23,7 @@ jobs:
         apk add build-base git bash
     - uses: actions/checkout@v2
     - run: |
+        git config --global --add safe.directory /__w/ps2bench/ps2bench
         git fetch --prune --unshallow
     - name: Compile project
       run: |
