@@ -141,17 +141,11 @@ sdx_ldx_loop:
 		if (Pad::readButton(Pad::ButtonState::O))
 			return;
 
-		// This is kind of ugly, but the code here is very finicky and works
-		// so I don't want to touch it :)
-		// The problem is, the assembler & compiler don't know that we rely on $t9
-		// in our generated code.
-		register u32 safeAddress asm("$t9");
-		safeAddress = (u32)ptrSafeAddress;
-		safeAddress = safeAddress + 0; // Fixes unused-but-set-variable warning
-
-		asm("jalr %0\n jalr %0\n"
+		asm volatile("la $t9, %1\n"
 			"jalr %0\n jalr %0\n"
-			 ::"r"(&our_func[0]):"$t4","$t1","$t2","$t3","$s0","$s1","$s2","$s3","$s4","$t9");
+			"jalr %0\n jalr %0\n"
+			 ::"r"(&our_func[0]), "g"(ptrSafeAddress):"$t4","$t1",
+			 "$t2","$t3","$s0","$s1","$s2","$s3","$s4","$t9");
 goto sdx_ldx_loop;
 
 }

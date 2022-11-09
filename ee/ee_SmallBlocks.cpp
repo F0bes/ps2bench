@@ -1,4 +1,5 @@
 #include "ee.hpp"
+#include <kernel.h>
 // Stresses the JIT by creating a bunch of small blocks
 
 #define jit_block_count_est 90000 // Estimated amount of JIT blocks this'll produce
@@ -20,6 +21,7 @@ void eebench_smallBlocks(void)
 	}
 	instructionBlock[(jit_block_count_est * 3) - 2] = 0x03e00008; // jr ra
 	instructionBlock[(jit_block_count_est * 3) - 1] = 0x00000000; // nop
+	FlushCache(0);
 	while(1)
 	{
 		asm("jalr %0"::"r"(&instructionBlock[0]));
