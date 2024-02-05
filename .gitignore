@@ -2,3 +2,5 @@
 .vscode/*
 *.o
 *.elf
+padman.c
+sio2man.c
