@@ -5,8 +5,12 @@
 #include <sifrpc.h>
 #include <graph.h> // Todo: Roll our own wait_vsync (easy, but I'm lazy)
 #include <stdio.h>
-#include "irx/sio2man.h"
-#include "irx/padman.h"
+
+extern unsigned char sio2man_irx[];
+extern unsigned int size_sio2man_irx;
+
+extern unsigned char padman_irx[];
+extern unsigned int size_padman_irx;
 
 // Based on the padx example in the ps2sdk
 // Todo - maybe support disconnects and connects?
@@ -33,7 +37,7 @@ void Pad::init()
 
 	sbv_patch_enable_lmb();
 
-	if ((ret = SifExecModuleBuffer(sio2man, size_sio2man, 0, NULL, NULL)) < 0)
+	if ((ret = SifExecModuleBuffer(sio2man_irx, size_sio2man_irx, 0, NULL, NULL)) < 0)
 	{
 		printf("Failed to load sio2man module (%d)\n", ret);
 		SleepThread();
@@ -41,7 +45,7 @@ void Pad::init()
 
 	printf("ret is %d\n", ret);
 
-	if ((ret = SifExecModuleBuffer(padman, size_padman, 0, NULL, NULL)) < 0)
+	if ((ret = SifExecModuleBuffer(padman_irx, size_padman_irx, 0, NULL, NULL)) < 0)
 	{
 		printf("Failed to load padman module (%d)\n", ret);
 		SleepThread();

@@ -10,19 +10,27 @@ EE_OBJS += vu/vuBenches.o vu/vuMisc.o vu/vu.o
 EE_OBJS += birdy/vu1Birdy.o
 # GS stuff
 EE_OBJS += gs/gs.o
- 
+# Module stuff 
+EE_OBJS += padman.o sio2man.o
+
 EE_BIN = ps2bench.elf
 EE_INCS = -I$(GSKIT)/include
 EE_LIBS = -lkernel -lgraph -L$(GSKIT)/lib -lgskit -ldmakit -lpad -lpatches -lstdc++ -ldma -lpacket
 EE_DVP = dvp-as
 EE_VCL = vcl
 
+BIN2C = $(PS2SDK)/bin/bin2c
+
 all: $(EE_BIN)
-	bin2c irx/padman.irx irx/padman.h padman
-	bin2c irx/sio2man.irx irx/sio2man.h sio2man
 
 %.o: %.vsm
 	$(EE_DVP) $< -o $@
+
+padman.c: $(PS2SDK)/iop/irx/padman.irx
+	$(BIN2C) $< $@ padman_irx
+
+sio2man.c: $(PS2SDK)/iop/irx/sio2man.irx
+	$(BIN2C) $< $@ sio2man_irx
 
 clean:
 	rm -f $(EE_BIN) $(EE_OBJS) 
